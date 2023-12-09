@@ -1,13 +1,12 @@
-package com.example.bangboardgamebackend;
+package server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BangBoardGameBackendApplication {
+public class BackendApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BangBoardGameBackendApplication.class, args);
+        SpringApplication.run(BackendApplication.class, args);
     }
-
 }
