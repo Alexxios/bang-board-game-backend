@@ -1,12 +1,6 @@
 package server.controllers;
-
-import jakarta.servlet.http.HttpSession;
-import server.beans.UserBean;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import game_controllers.GameCreator;
+import org.springframework.web.bind.annotation.*;
+import server.services.GamesService;
 
 import java.util.concurrent.ExecutionException;
 
@@ -14,9 +8,15 @@ import java.util.concurrent.ExecutionException;
 @CrossOrigin
 public class GamesController {
 
-    @GetMapping("/create_game")
+    private GamesService gamesService;
+
+    public GamesController(GamesService gamesService){
+        this.gamesService = gamesService;
+    }
+
+    @PostMapping("/create_game")
     public String createGame(@RequestParam String userId) throws ExecutionException, InterruptedException {
-        return GameCreator.createGame(userId);
+        return gamesService.createGame(userId);
     }
 
     @GetMapping("/connect")

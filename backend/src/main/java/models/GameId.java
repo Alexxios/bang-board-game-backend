@@ -1,6 +1,8 @@
 package models;
 
-import exceptions.GameExceptions;
+import exceptions.game_exceptions.CanNotJoinGame;
+import exceptions.game_exceptions.FullGame;
+import exceptions.game_exceptions.PlayerAlreadyInGame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,15 +47,15 @@ public class GameId {
         return playersIds;
     }
 
-    public void addPlayer(String playerId) throws GameExceptions.FullGame, GameExceptions.PlayerAlreadyInGame, GameExceptions.CanNotJoinGame {
+    public void addPlayer(String playerId) throws FullGame, PlayerAlreadyInGame, CanNotJoinGame {
         if (playersIds.size() == maxPlayersCount){
-            throw new GameExceptions.FullGame();
+            throw new FullGame();
         }
         if (playersIds.contains(playerId)){
-            throw new GameExceptions.PlayerAlreadyInGame();
+            throw new PlayerAlreadyInGame();
         }
         if (gameStatus != GameStatus.WaitingPlayers){
-            throw new GameExceptions.CanNotJoinGame();
+            throw new CanNotJoinGame();
         }
         playersIds.add(playerId);
     }
