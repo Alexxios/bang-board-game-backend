@@ -1,18 +1,28 @@
 package game_controllers;
 
-class GameNumberGenerator{
-    private static int gameNumber = 0;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import database.FirebaseClient;
+import models.GameId;
 
-    public static int getGameNumber(){
-        ++gameNumber;
-        return gameNumber;
+import java.util.concurrent.ExecutionException;
+
+class GameIdGenerator{
+    private static int gamesCount = 0;
+
+    public static String generateGameId(){
+        ++gamesCount;
+        return String.valueOf(gamesCount);
     }
 }
 
 public class GameCreator {
-    public static int createGame(){
-        int gameNumber = GameNumberGenerator.getGameNumber();
-        // add to database
-        return gameNumber;
+    static final String collectionName = "games";
+
+    public static String createGame(String userId) throws ExecutionException, InterruptedException {
+        CollectionReference collection = FirebaseClient.getCollection(collectionName);
+        String gameId =  GameIdGenerator.generateGameId();
+        FirebaseClient.addToCollection(collection, new GameId(userId, gameId, 4));
+        return gameId;
     }
 }
