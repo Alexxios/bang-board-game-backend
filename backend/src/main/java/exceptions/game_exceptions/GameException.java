@@ -1,4 +1,4 @@
 package exceptions.game_exceptions;
 
-public interface GameException {}
+public class GameException extends Exception {}
 

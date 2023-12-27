@@ -17,16 +17,20 @@ public class UsersService {
 
     private static final String collectionName = "users";
 
-    public String addUser(String userId) throws ExecutionException, InterruptedException {
+    public boolean isUserExists(String userId) throws ExecutionException, InterruptedException {
         CollectionReference collection = FirebaseClient.getCollection(collectionName);
         List<QueryDocumentSnapshot> users = collection.get().get().getDocuments();
         for (QueryDocumentSnapshot document : users){
             User user = document.toObject(User.class);
             if (Objects.equals(user.getUserId(), userId)){
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                return true;
             }
         }
+        return false;
+    }
 
+    public String addUser(String userId) throws ExecutionException, InterruptedException {
+        CollectionReference collection = FirebaseClient.getCollection(collectionName);
         FirebaseClient.addToCollection(collection, userId);
         return userId;
     }

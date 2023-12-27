@@ -3,6 +3,7 @@ package models;
 import exceptions.game_exceptions.CanNotJoinGame;
 import exceptions.game_exceptions.FullGame;
 import exceptions.game_exceptions.PlayerAlreadyInGame;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ enum GameStatus{
     Ended
 }
 
+@Getter
 public class GameId {
     public GameId(String ownerId, String gameId, int maxPlayersCount) {
         this.ownerId = ownerId;
@@ -23,28 +25,8 @@ public class GameId {
         gameStatus = GameStatus.WaitingPlayers;
     }
 
-    public String getOwnerId() {
-        return ownerId;
-    }
-
-    public String getGameId() {
-        return gameId;
-    }
-
-    public int getMaxPlayersCount() {
-        return maxPlayersCount;
-    }
-
     public int getCurrentPlayersCount() {
         return playersIds.size();
-    }
-
-    public GameStatus getGameStatus() {
-        return gameStatus;
-    }
-
-    public List<String> getPlayersIds() {
-        return playersIds;
     }
 
     public void addPlayer(String playerId) throws FullGame, PlayerAlreadyInGame, CanNotJoinGame {
@@ -58,6 +40,10 @@ public class GameId {
             throw new CanNotJoinGame();
         }
         playersIds.add(playerId);
+
+        if (playersIds.size() == maxPlayersCount){
+            gameStatus = GameStatus.Playing;
+        }
     }
 
     private String ownerId;

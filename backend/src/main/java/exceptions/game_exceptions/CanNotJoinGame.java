@@ -1,4 +1,4 @@
 package exceptions.game_exceptions;
 
-public class CanNotJoinGame extends Exception implements GameException {
+public class CanNotJoinGame extends GameException {
 }
