@@ -2,17 +2,19 @@ package models;
 
 import cards.Role;
 import lombok.Getter;
+import lombok.Setter;
 import models.cards.Card;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Getter
 public class Player {
-    public Player(Role role, int health, int distance, List<Card> cards) {
+
+    public Player(Role role) {
         this.role = role;
-        this.health = health;
-        this.distance = distance;
-        this.cards = cards;
+        this.health = 0;
+        this.distance = 1;
     }
 
     public void getCard(Card card){
@@ -27,8 +29,13 @@ public class Player {
         health -= damage;
     }
 
-    private Role role;
+    public void updateDistance(int delta){
+        distance += delta;
+    }
+
+    private final Role role;
     private int health;
     private int distance;
+    @Setter
     private List<Card> cards;
 }

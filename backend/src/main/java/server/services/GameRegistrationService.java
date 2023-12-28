@@ -24,7 +24,7 @@ class GameIdGenerator{
 
 @Service
 public class GameRegistrationService {
-    static final String collectionName = "games";
+    static final String collectionName = "gameInfo";
 
     public String createGame(String userId) throws ExecutionException, InterruptedException {
         final String gameId = GameIdGenerator.generateGameId();
@@ -34,17 +34,21 @@ public class GameRegistrationService {
         return gameId;
     }
 
-    public String connectToGame(String userId, String gameId) throws ExecutionException, InterruptedException, PlayerAlreadyInGame, CanNotJoinGame, FullGame, GameDoesNotExist {
+    public int connectToGame(String userId, String gameId) throws ExecutionException, InterruptedException, PlayerAlreadyInGame, CanNotJoinGame, FullGame, GameDoesNotExist {
         DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
         DocumentSnapshot document = documentReference.get().get();
+        int playersCount;
         if (document.exists()){
             GameId game = document.toObject(GameId.class);
             game.addPlayer(userId);
             documentReference.set(game);
+            playersCount = game.getCurrentPlayersCount();
         }else{
             throw new GameDoesNotExist();
         }
 
-        return gameId;
+
+
+        return playersCount;
     }
 }
