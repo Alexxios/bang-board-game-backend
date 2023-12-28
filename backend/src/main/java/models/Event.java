@@ -4,8 +4,15 @@ import lombok.Getter;
 
 @Getter
 public class Event {
-    private String senderId;
-    private String getterId;
-    private CardDescription cardDescription;
+    public Event(int senderIndex, int getterIndex, CardDescription cardDescription, int cardIndex) {
+        this.senderIndex = senderIndex;
+        this.getterIndex = getterIndex;
+        this.cardDescription = cardDescription;
+        this.cardIndex = cardIndex;
+    }
 
+    private int senderIndex;
+    private int getterIndex;
+    private CardDescription cardDescription;
+    private int cardIndex;
 }

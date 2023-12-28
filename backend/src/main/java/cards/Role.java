@@ -1,6 +1,6 @@
 package cards;
 
-public enum Roles {
+public enum Role {
     Sheriff,
     Assistant,
     Bandit
