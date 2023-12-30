@@ -11,10 +11,15 @@ import java.util.List;
 @Getter
 public class Player {
 
+    public Player() {
+        this.role = Role.Sheriff;
+    }
+
     public Player(Role role) {
         this.role = role;
-        this.health = 0;
+        this.health = role.getHealth();
         this.distance = 1;
+        this.shootDamage = 1;
     }
 
     public void getCard(Card card){
@@ -25,7 +30,7 @@ public class Player {
         cards.remove(index);
     }
 
-    public void getDamage(int damage){
+    public void takeDamage(int damage){
         health -= damage;
     }
 
@@ -36,6 +41,8 @@ public class Player {
     private final Role role;
     private int health;
     private int distance;
+    @Setter
+    private int shootDamage;
     @Setter
     private List<Card> cards;
 }

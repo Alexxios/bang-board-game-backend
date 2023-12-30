@@ -2,6 +2,7 @@ package server.controllers;
 
 import exceptions.game_exceptions.GameDoesNotExist;
 import models.Event;
+import models.GameEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.GameService;
 
@@ -21,8 +22,8 @@ public class GameController {
         gameService.initGame(gameId);
     }
 
-    @PostMapping("handler-event")
-    public void handleEvent(@RequestParam String gameId, @RequestBody Event event) throws GameDoesNotExist, ExecutionException, InterruptedException {
-        gameService.handleEvent(gameId, event);
+    @PostMapping("handle-event")
+    public GameEntity handleEvent(@RequestParam String gameId, @RequestBody Event event) throws GameDoesNotExist, ExecutionException, InterruptedException {
+        return gameService.handleEvent(gameId, event);
     }
 }

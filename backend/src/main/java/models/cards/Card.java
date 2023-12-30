@@ -4,5 +4,5 @@ import models.Event;
 import models.GameEntity;
 
 public interface Card {
-    void handlerEvent(GameEntity game, Event event);
+    GameEntity handlerEvent(GameEntity game, Event event);
 }

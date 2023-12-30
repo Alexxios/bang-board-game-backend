@@ -26,7 +26,7 @@ public class GameService {
     public void initGame(String gameId) {
         DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
         List<Card> cards = CardsGenerator.generateCards();
-        List<Role> roles = RolesGenerator.generateRoles();
+        List<Role> roles = RolesGenerator.generateRoles(4);
         List<Player> players = new ArrayList<Player>();
 
         for(Role role : roles){
@@ -37,7 +37,7 @@ public class GameService {
         documentReference.set(game);
     }
 
-    public void handleEvent(String gameId, Event event) throws ExecutionException, InterruptedException, GameDoesNotExist {
+    public GameEntity handleEvent(String gameId, Event event) throws ExecutionException, InterruptedException, GameDoesNotExist {
         DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
         DocumentSnapshot document = documentReference.get().get();
         if (!document.exists()){
@@ -46,6 +46,8 @@ public class GameService {
 
         GameEntity game = document.toObject(GameEntity.class);
         Card card = CardMapper.searchCard(event.getCardDescription());
-        card.handlerEvent(game, event);
+        GameEntity newGameEntity = card.handlerEvent(game, event);
+        documentReference.set(newGameEntity);
+        return newGameEntity;
     }
 }

@@ -25,7 +25,7 @@ class GameIdGenerator{
 
 @Service
 public class GameRegistrationService {
-    static final String collectionName = "gameInfo";
+    static final String collectionName = "gamesInfo";
 
     public String createGame(User user) throws ExecutionException, InterruptedException {
         final String gameId = GameIdGenerator.generateGameId();

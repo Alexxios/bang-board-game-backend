@@ -7,6 +7,9 @@ import java.util.List;
 
 @Getter
 public class GameEntity {
+
+    public GameEntity(){}
+
     public GameEntity(int motionPlayerIndex, List<Player> players, List<Card> cards) {
         this.motionPlayerIndex = motionPlayerIndex;
         this.players = players;
