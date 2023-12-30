@@ -16,6 +16,11 @@ public class GameController {
         this.gameService = gameService;
     }
 
+    @PostMapping("init-game")
+    public void initGame(@RequestParam String gameId){
+        gameService.initGame(gameId);
+    }
+
     @PostMapping("handler-event")
     public void handleEvent(@RequestParam String gameId, @RequestBody Event event) throws GameDoesNotExist, ExecutionException, InterruptedException {
         gameService.handleEvent(gameId, event);

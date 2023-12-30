@@ -1,5 +1,6 @@
 package server.controllers;
 import exceptions.game_exceptions.*;
+import models.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,19 +18,19 @@ public class GameRegistrationController {
         this.gamesService = gamesService;
     }
 
-    @PostMapping("/create_game")
-    public String createGame(@RequestParam String userId) throws ExecutionException, InterruptedException {
-        return gamesService.createGame(userId);
+    @PostMapping("create-game")
+    public String createGame(@RequestBody User user) throws ExecutionException, InterruptedException {
+        return gamesService.createGame(user);
     }
 
-    @GetMapping("/connect")
-    public String connectToGame(@RequestParam String userId, String gameId) throws GameDoesNotExist, PlayerAlreadyInGame, CanNotJoinGame, FullGame, ExecutionException, InterruptedException {
+    @GetMapping("connect")
+    public User connectToGame(@RequestParam User user, String gameId) throws GameDoesNotExist, PlayerAlreadyInGame, CanNotJoinGame, FullGame, ExecutionException, InterruptedException {
         try{
-            gamesService.connectToGame(userId, gameId);
+            gamesService.connectToGame(user, gameId);
         } catch (GameException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
-        return userId;
+        return user;
     }
 }

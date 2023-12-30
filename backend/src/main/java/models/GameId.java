@@ -16,40 +16,40 @@ enum GameStatus{
 
 @Getter
 public class GameId {
-    public GameId(String ownerId, String gameId, int maxPlayersCount) {
-        this.ownerId = ownerId;
+    public GameId(User owner, String gameId, int maxPlayersCount) {
+        this.owner = owner;
         this.gameId = gameId;
         this.maxPlayersCount = maxPlayersCount;
-        playersIds = new ArrayList<String>();
-        playersIds.add(ownerId);
+        usersIds = new ArrayList<>();
+        usersIds.add(owner);
         gameStatus = GameStatus.WaitingPlayers;
     }
 
     public int getCurrentPlayersCount() {
-        return playersIds.size();
+        return usersIds.size();
     }
 
-    public void addPlayer(String playerId) throws FullGame, PlayerAlreadyInGame, CanNotJoinGame {
-        if (playersIds.size() == maxPlayersCount){
+    public void addPlayer(User user) throws FullGame, PlayerAlreadyInGame, CanNotJoinGame {
+        if (usersIds.size() == maxPlayersCount){
             throw new FullGame();
         }
-        if (playersIds.contains(playerId)){
+        if (usersIds.contains(user)){
             throw new PlayerAlreadyInGame();
         }
         if (gameStatus != GameStatus.WaitingPlayers){
             throw new CanNotJoinGame();
         }
-        playersIds.add(playerId);
+        usersIds.add(user);
 
-        if (playersIds.size() == maxPlayersCount){
+        if (usersIds.size() == maxPlayersCount){
             gameStatus = GameStatus.Playing;
         }
     }
 
-    private String ownerId;
+    private User owner;
     private String gameId;
     private int maxPlayersCount;
 
     private GameStatus gameStatus;
-    private List<String> playersIds;
+    private List<User> usersIds;
 }

@@ -8,6 +8,7 @@ import exceptions.game_exceptions.FullGame;
 import exceptions.game_exceptions.GameDoesNotExist;
 import exceptions.game_exceptions.PlayerAlreadyInGame;
 import models.GameId;
+import models.User;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ExecutionException;
@@ -26,28 +27,26 @@ class GameIdGenerator{
 public class GameRegistrationService {
     static final String collectionName = "gameInfo";
 
-    public String createGame(String userId) throws ExecutionException, InterruptedException {
+    public String createGame(User user) throws ExecutionException, InterruptedException {
         final String gameId = GameIdGenerator.generateGameId();
         DocumentReference document = FirebaseClient.getDocument(collectionName, gameId);
-        GameId game = new GameId(userId, gameId, 4);
+        GameId game = new GameId(user, gameId, 4);
         FirebaseClient.addToDocument(document, game);
         return gameId;
     }
 
-    public int connectToGame(String userId, String gameId) throws ExecutionException, InterruptedException, PlayerAlreadyInGame, CanNotJoinGame, FullGame, GameDoesNotExist {
+    public int connectToGame(User user, String gameId) throws ExecutionException, InterruptedException, PlayerAlreadyInGame, CanNotJoinGame, FullGame, GameDoesNotExist {
         DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
         DocumentSnapshot document = documentReference.get().get();
         int playersCount;
         if (document.exists()){
             GameId game = document.toObject(GameId.class);
-            game.addPlayer(userId);
+            game.addPlayer(user);
             documentReference.set(game);
             playersCount = game.getCurrentPlayersCount();
         }else{
             throw new GameDoesNotExist();
         }
-
-
 
         return playersCount;
     }
