@@ -39,15 +39,26 @@ public class GameService {
 
     public GameEntity handleEvent(String gameId, Event event) throws ExecutionException, InterruptedException, GameDoesNotExist {
         DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
+        GameEntity game = getGameEntity(documentReference);
+        Card card = CardMapper.searchCard(event.getCardDescription());
+        GameEntity newGameEntity = card.handlerEvent(game, event);
+        documentReference.set(newGameEntity);
+        return newGameEntity;
+    }
+
+    public GameEntity nextMotion(String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
+        DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
+        GameEntity game = getGameEntity(documentReference);
+        game.nextMotion();
+        return game;
+    }
+
+    private GameEntity getGameEntity(DocumentReference documentReference) throws ExecutionException, InterruptedException, GameDoesNotExist {
         DocumentSnapshot document = documentReference.get().get();
         if (!document.exists()){
             throw new GameDoesNotExist();
         }
 
-        GameEntity game = document.toObject(GameEntity.class);
-        Card card = CardMapper.searchCard(event.getCardDescription());
-        GameEntity newGameEntity = card.handlerEvent(game, event);
-        documentReference.set(newGameEntity);
-        return newGameEntity;
+        return document.toObject(GameEntity.class);
     }
 }

@@ -26,4 +26,9 @@ public class GameController {
     public GameEntity handleEvent(@RequestParam String gameId, @RequestBody Event event) throws GameDoesNotExist, ExecutionException, InterruptedException {
         return gameService.handleEvent(gameId, event);
     }
+
+    @PostMapping
+    public GameEntity nextMotion(@RequestParam String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
+        return gameService.nextMotion(gameId);
+    }
 }
