@@ -43,9 +43,8 @@ public class GameService {
     public GameEntity handleEvent(String gameId, Event event) throws ExecutionException, InterruptedException, GameDoesNotExist {
         DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
         GameEntity game = getGameEntity(documentReference);
-        GameEntity newGameEntity;
 
-        if (game.getCallback().isActive()){
+        if (game.getCallback() != null && game.getCallback().isActive()){
             CallbackType callbackType = game.getCallback().getCallbackType();
             ICallback callback = CallbackMapper.searchCallback(callbackType);
             if (callback.checkCallback(event)){
@@ -55,14 +54,13 @@ public class GameService {
             }
             game.setMotionPlayerIndex(game.getCallback().getCallbackPlayerId());
             resetCallback(game);
-            newGameEntity = game;
         }else{
             ICard card = CardMapper.searchCard(event.getCardDescription());
-            newGameEntity = card.handlerEvent(game, event);
+            card.handlerEvent(game, event);
         }
 
-        documentReference.set(newGameEntity);
-        return newGameEntity;
+        documentReference.set(game);
+        return game;
     }
 
     public GameEntity nextMotion(String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
