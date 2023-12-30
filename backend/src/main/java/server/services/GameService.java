@@ -1,5 +1,8 @@
 package server.services;
 
+import callbacks.CallbackMapper;
+import callbacks.CallbackType;
+import callbacks.ICallback;
 import cards.CardMapper;
 import cards.Role;
 import com.google.cloud.firestore.DocumentReference;
@@ -11,7 +14,7 @@ import helpers.RolesGenerator;
 import models.Event;
 import models.GameEntity;
 import models.Player;
-import models.cards.Card;
+import models.cards.ICard;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,7 +28,7 @@ public class GameService {
 
     public void initGame(String gameId) {
         DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
-        List<Card> cards = CardsGenerator.generateCards();
+        List<ICard> cards = CardsGenerator.generateCards();
         List<Role> roles = RolesGenerator.generateRoles(4);
         List<Player> players = new ArrayList<Player>();
 
@@ -40,8 +43,24 @@ public class GameService {
     public GameEntity handleEvent(String gameId, Event event) throws ExecutionException, InterruptedException, GameDoesNotExist {
         DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
         GameEntity game = getGameEntity(documentReference);
-        Card card = CardMapper.searchCard(event.getCardDescription());
-        GameEntity newGameEntity = card.handlerEvent(game, event);
+        GameEntity newGameEntity;
+
+        if (game.getCallback().isActive()){
+            CallbackType callbackType = game.getCallback().getCallbackType();
+            ICallback callback = CallbackMapper.searchCallback(callbackType);
+            if (callback.checkCallback(event)){
+                callback.positiveAction(game);
+            }else{
+                callback.negativeAction(game);
+            }
+            game.setMotionPlayerIndex(game.getCallback().getCallbackPlayerId());
+            resetCallback(game);
+            newGameEntity = game;
+        }else{
+            ICard card = CardMapper.searchCard(event.getCardDescription());
+            newGameEntity = card.handlerEvent(game, event);
+        }
+
         documentReference.set(newGameEntity);
         return newGameEntity;
     }
@@ -53,6 +72,14 @@ public class GameService {
         return game;
     }
 
+    public GameEntity resetCallback(String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
+        DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
+        GameEntity game = getGameEntity(documentReference);
+        resetCallback(game);
+        documentReference.set(game);
+        return game;
+    }
+
     private GameEntity getGameEntity(DocumentReference documentReference) throws ExecutionException, InterruptedException, GameDoesNotExist {
         DocumentSnapshot document = documentReference.get().get();
         if (!document.exists()){
@@ -60,5 +87,9 @@ public class GameService {
         }
 
         return document.toObject(GameEntity.class);
+    }
+
+    private void resetCallback(GameEntity game) {
+        game.getCallback().reset();
     }
 }

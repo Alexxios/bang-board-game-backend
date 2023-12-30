@@ -27,8 +27,13 @@ public class GameController {
         return gameService.handleEvent(gameId, event);
     }
 
-    @PostMapping
+    @PostMapping("next-motion")
     public GameEntity nextMotion(@RequestParam String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
         return gameService.nextMotion(gameId);
+    }
+
+    @PostMapping("reset-callback")
+    public GameEntity resetCallback(@RequestParam String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
+        return gameService.resetCallback(gameId);
     }
 }

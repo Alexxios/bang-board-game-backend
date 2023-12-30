@@ -3,6 +3,6 @@ package models.cards;
 import models.Event;
 import models.GameEntity;
 
-public interface Card {
+public interface ICard {
     GameEntity handlerEvent(GameEntity game, Event event);
 }

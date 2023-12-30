@@ -1,16 +1,18 @@
 package models.cards;
 
+import callbacks.CallbackType;
+import models.Callback;
 import models.Event;
 import models.GameEntity;
-import models.Player;
 
-public class Bang implements Card{
+public class Bang implements ICard {
+
     @Override
     public GameEntity handlerEvent(GameEntity game, Event event) {
-        Player shooter = game.getPlayer(event.getSenderIndex());
-        Player victim = game.getPlayer(event.getGetterIndex());
-        victim.takeDamage(shooter.getShootDamage());
-        game.checkPlayer(event.getGetterIndex());
+        Callback callback = new Callback(event.getGetterIndex(), event.getSenderIndex(), CallbackType.Bang);
+        game.setCallback(callback);
         return game;
     }
+
+
 }

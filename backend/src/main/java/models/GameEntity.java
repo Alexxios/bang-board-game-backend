@@ -1,7 +1,8 @@
 package models;
 
 import lombok.Getter;
-import models.cards.Card;
+import lombok.Setter;
+import models.cards.ICard;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public class GameEntity {
 
     public GameEntity(){}
 
-    public GameEntity(int motionPlayerIndex, List<Player> players, List<Card> cards) {
+    public GameEntity(int motionPlayerIndex, List<Player> players, List<ICard> cards) {
         this.motionPlayerIndex = motionPlayerIndex;
         this.players = players;
         this.cards = cards;
@@ -39,8 +40,10 @@ public class GameEntity {
         }
     }
 
-
+    @Setter
     private int motionPlayerIndex;
     private List<Player> players;
-    private List<Card> cards;
+    private List<ICard> cards;
+    @Setter
+    private Callback callback;
 }

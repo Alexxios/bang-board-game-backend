@@ -3,8 +3,7 @@ package models;
 import cards.Role;
 import lombok.Getter;
 import lombok.Setter;
-import models.cards.Card;
-import org.springframework.stereotype.Service;
+import models.cards.ICard;
 
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class Player {
         this.shootDamage = 1;
     }
 
-    public void getCard(Card card){
+    public void getCard(ICard card){
         cards.add(card);
     }
 
@@ -44,5 +43,5 @@ public class Player {
     @Setter
     private int shootDamage;
     @Setter
-    private List<Card> cards;
+    private List<ICard> cards;
 }
