@@ -1,8 +1,8 @@
 package server.services;
 
-import callbacks.CallbackMapper;
+import callbacks.CallbackHandlersMapper;
 import callbacks.CallbackType;
-import callbacks.ICallback;
+import callbacks.handlers.ICallbackHandler;
 import cards.CardMapper;
 import cards.Role;
 import com.google.cloud.firestore.DocumentReference;
@@ -44,15 +44,16 @@ public class GameService {
         DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
         GameEntity game = getGameEntity(documentReference);
 
-        if (game.getCallback() != null && game.getCallback().isActive()){
+        if (game.getCallback().isActive()){
             CallbackType callbackType = game.getCallback().getCallbackType();
-            ICallback callback = CallbackMapper.searchCallback(callbackType);
+            ICallbackHandler callback = CallbackHandlersMapper.searchCallback(callbackType);
+
             if (callback.checkCallback(event)){
                 callback.positiveAction(game);
             }else{
                 callback.negativeAction(game);
             }
-            game.setMotionPlayerIndex(game.getCallback().getCallbackPlayerId());
+            game.setMotionPlayerIndex(game.getCallback().getEvent().getSenderIndex());
             resetCallback(game);
         }else{
             ICard card = CardMapper.searchCard(event.getCardDescription());
@@ -73,6 +74,11 @@ public class GameService {
     public GameEntity resetCallback(String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
         DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
         GameEntity game = getGameEntity(documentReference);
+
+        CallbackType callbackType = game.getCallback().getCallbackType();
+        ICallbackHandler callback = CallbackHandlersMapper.searchCallback(callbackType);
+        callback.negativeAction(game);
+
         resetCallback(game);
         documentReference.set(game);
         return game;

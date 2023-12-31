@@ -9,8 +9,9 @@ public class Bang implements ICard {
 
     @Override
     public GameEntity handlerEvent(GameEntity game, Event event) {
-        Callback callback = new Callback(event.getGetterIndex(), event.getSenderIndex(), CallbackType.Bang);
+        Callback callback = new Callback(event, CallbackType.Bang);
         game.setCallback(callback);
+        game.setMotionPlayerIndex(event.getGetterIndex());
         return game;
     }
 

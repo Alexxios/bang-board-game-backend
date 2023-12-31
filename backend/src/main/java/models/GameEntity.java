@@ -15,6 +15,7 @@ public class GameEntity {
         this.motionPlayerIndex = motionPlayerIndex;
         this.players = players;
         this.cards = cards;
+        this.callback = new Callback();
     }
 
     public void nextMotion(){
@@ -38,6 +39,10 @@ public class GameEntity {
         if (players.get(playerIndex).getHealth() <= 0){
             players.remove(playerIndex);
         }
+    }
+
+    public void resetCallback(){
+        this.callback.reset();
     }
 
     @Setter

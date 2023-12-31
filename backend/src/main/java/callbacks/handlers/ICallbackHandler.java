@@ -1,10 +1,9 @@
-package callbacks;
+package callbacks.handlers;
 
-import models.Callback;
 import models.Event;
 import models.GameEntity;
 
-public interface ICallback {
+public interface ICallbackHandler {
     boolean checkCallback(Event event);
     GameEntity positiveAction(GameEntity game);
     GameEntity negativeAction(GameEntity game);

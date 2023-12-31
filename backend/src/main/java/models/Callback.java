@@ -2,6 +2,7 @@ package models;
 
 import callbacks.CallbackType;
 import lombok.Getter;
+import lombok.Setter;
 import server.services.GameService;
 
 import java.util.function.Function;
@@ -14,10 +15,9 @@ public class Callback {
         callbackType = CallbackType.None;
     }
 
-    public Callback(int currentPlayerId, int callbackPlayerId, CallbackType callbackType){
+    public Callback(Event event, CallbackType callbackType){
         this.isActive = true;
-        this.currentPlayerId = currentPlayerId;
-        this.callbackPlayerId = callbackPlayerId;
+        this.event = event;
         this.callbackType = callbackType;
     }
 
@@ -25,8 +25,8 @@ public class Callback {
         isActive = false;
     }
 
+    @Setter
     private boolean isActive;
-    private int currentPlayerId;
-    private int callbackPlayerId;
+    private Event event;
     private CallbackType callbackType;
 }
