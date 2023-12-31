@@ -19,6 +19,7 @@ public class Player {
         this.health = role.getHealth();
         this.distance = 1;
         this.shootDamage = 1;
+        this.maxHealth = role.getHealth();
     }
 
     public void getCard(ICard card){
@@ -33,12 +34,17 @@ public class Player {
         health -= damage;
     }
 
+    public void getHealth(int value){
+        health = Math.max(health + value, maxHealth);
+    }
+
     public void updateDistance(int delta){
         distance += delta;
     }
 
     private final Role role;
     private int health;
+    private int maxHealth;
     private int distance;
     @Setter
     private int shootDamage;

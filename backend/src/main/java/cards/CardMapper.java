@@ -1,9 +1,7 @@
 package cards;
 
 import models.CardDescription;
-import models.cards.Bang;
-import models.cards.ICard;
-import models.cards.Prison;
+import models.cards.*;
 
 import java.util.HashMap;
 
@@ -13,6 +11,8 @@ public class CardMapper {
     static {
         cards.put(PlayingCards.Bang, new Bang());
         cards.put(PlayingCards.Prison, new Prison());
+        cards.put(PlayingCards.Beer, new Beer());
+        cards.put(PlayingCards.Miss, new Miss());
     }
 
     public static ICard searchCard(CardDescription cardDescription){
