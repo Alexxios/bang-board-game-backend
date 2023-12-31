@@ -1,7 +1,6 @@
 package callbacks.handlers;
 
-import callbacks.handlers.ICallbackHandler;
-import cards.PlayingCards;
+import cards.PlayingCard;
 import models.Callback;
 import models.Event;
 import models.GameEntity;
@@ -10,7 +9,7 @@ import models.Player;
 public class BangCallbackHandler implements ICallbackHandler {
     @Override
     public boolean checkCallback(Event event) {
-        return event.getCardDescription().getCard() == PlayingCards.Miss;
+        return event.getCardDescription().getCard() == PlayingCard.Miss;
     }
 
     @Override

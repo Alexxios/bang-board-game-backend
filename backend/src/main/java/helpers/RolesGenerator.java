@@ -2,15 +2,16 @@ package helpers;
 
 import cards.Role;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class RolesGenerator {
     public static List<Role> generateRoles(int playersCount){
         ArrayList<Role> result = new ArrayList<Role>();
-        for (int i = 0; i < playersCount; ++i){
-            result.add(Role.Sheriff);
-        }
+        result.add(Role.Sheriff);
+        result.add(Role.Assistant);
+        result.add(Role.Bandit);
+        result.add(Role.Bandit);
+        Collections.shuffle(result);
         return result;
     }
 }

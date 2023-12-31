@@ -24,7 +24,7 @@ public class GameRegistrationController {
     }
 
     @GetMapping("connect")
-    public User connectToGame(@RequestParam User user, String gameId) throws GameDoesNotExist, PlayerAlreadyInGame, CanNotJoinGame, FullGame, ExecutionException, InterruptedException {
+    public User connectToGame(@RequestParam User user, String gameId) throws ExecutionException, InterruptedException {
         try{
             gamesService.connectToGame(user, gameId);
         } catch (GameException e){

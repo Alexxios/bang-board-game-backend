@@ -1,5 +1,6 @@
 package models;
 
+import cards.PlayingCard;
 import cards.Role;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +23,7 @@ public class Player {
         this.maxHealth = role.getHealth();
     }
 
-    public void getCard(ICard card){
+    public void getCard(PlayingCard card){
         cards.add(card);
     }
 
@@ -49,5 +50,5 @@ public class Player {
     @Setter
     private int shootDamage;
     @Setter
-    private List<ICard> cards;
+    private List<PlayingCard> cards;
 }

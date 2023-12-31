@@ -4,6 +4,7 @@ import callbacks.CallbackHandlersMapper;
 import callbacks.CallbackType;
 import callbacks.handlers.ICallbackHandler;
 import cards.CardMapper;
+import cards.PlayingCard;
 import cards.Role;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -28,7 +29,7 @@ public class GameService {
 
     public void initGame(String gameId) {
         DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
-        List<ICard> cards = CardsGenerator.generateCards();
+        List<PlayingCard> cards = CardsGenerator.generateCards();
         List<Role> roles = RolesGenerator.generateRoles(4);
         List<Player> players = new ArrayList<Player>();
 

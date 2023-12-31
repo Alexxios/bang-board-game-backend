@@ -1,6 +1,6 @@
 package cards;
 
-public enum PlayingCards {
+public enum PlayingCard {
     //weapons
     Colt,
     Remington,

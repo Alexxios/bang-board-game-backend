@@ -1,9 +1,9 @@
 package models;
 
-import cards.PlayingCards;
+import cards.PlayingCard;
 import lombok.Getter;
 
 @Getter
 public class CardDescription {
-    private PlayingCards card;
+    private PlayingCard card;
 }
