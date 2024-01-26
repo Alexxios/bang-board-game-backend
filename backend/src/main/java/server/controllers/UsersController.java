@@ -4,6 +4,7 @@ import models.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import response.models.NicknameCheckResult;
 import server.services.UsersService;
 import java.util.concurrent.ExecutionException;
 
@@ -25,8 +26,9 @@ public class UsersController {
         return usersService.addUser(userId);
     }
 
-    @GetMapping("find-user")
-    public boolean findUser(@RequestParam String userId) throws ExecutionException, InterruptedException {
-        return usersService.isUserExists(userId);
+    @GetMapping("check-nickname")
+    public NicknameCheckResult checkNickname(@RequestParam String nickname) throws ExecutionException, InterruptedException {
+        boolean result = usersService.isUserExists(nickname);
+        return new NicknameCheckResult(!result);
     }
 }

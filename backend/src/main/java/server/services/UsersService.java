@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
+
 @Service
 public class UsersService {
 
@@ -22,7 +23,7 @@ public class UsersService {
         List<QueryDocumentSnapshot> users = collection.get().get().getDocuments();
         for (QueryDocumentSnapshot document : users){
             User user = document.toObject(User.class);
-            if (Objects.equals(user.getUserId(), userId)){
+            if (Objects.equals(user.getNickname(), userId)){
                 return true;
             }
         }
