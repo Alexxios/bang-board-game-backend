@@ -1,4 +1,4 @@
-package server.controllers;
+package server.http.controllers;
 
 import models.User;
 import org.springframework.http.HttpStatus;

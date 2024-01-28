@@ -1,4 +1,4 @@
-package server.controllers;
+package server.http.controllers;
 
 import exceptions.game_exceptions.GameDoesNotExist;
 import models.Event;

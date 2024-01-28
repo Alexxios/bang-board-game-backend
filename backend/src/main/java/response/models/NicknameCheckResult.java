@@ -1,5 +1,3 @@
 package response.models;
 
-public record NicknameCheckResult(boolean result) {
-
-}
+public record NicknameCheckResult(boolean result) {}

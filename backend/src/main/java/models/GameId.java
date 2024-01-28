@@ -16,40 +16,46 @@ enum GameStatus{
 
 @Getter
 public class GameId {
-    public GameId(User owner, String gameId, int maxPlayersCount) {
-        this.owner = owner;
-        this.gameId = gameId;
-        this.maxPlayersCount = maxPlayersCount;
-        usersIds = new ArrayList<>();
-        usersIds.add(owner);
+
+    public GameId() {
+        usersNicknames = new ArrayList<>();
         gameStatus = GameStatus.WaitingPlayers;
     }
 
-    public int getCurrentPlayersCount() {
-        return usersIds.size();
+    public GameId(String owner, String gameId, int maxPlayersCount) {
+        this.owner = owner;
+        this.gameId = gameId;
+        this.maxPlayersCount = maxPlayersCount;
+        usersNicknames = new ArrayList<>();
+        usersNicknames.add(owner);
+        gameStatus = GameStatus.WaitingPlayers;
     }
 
-    public void addPlayer(User user) throws FullGame, PlayerAlreadyInGame, CanNotJoinGame {
-        if (usersIds.size() == maxPlayersCount){
+//    public int getCurrentPlayersCount() {
+//        return usersNicknames.size();
+//    }
+
+    public void addPlayer(String user) throws FullGame, PlayerAlreadyInGame, CanNotJoinGame {
+        if (usersNicknames.size() == maxPlayersCount){
             throw new FullGame();
         }
-        if (usersIds.contains(user)){
+        if (usersNicknames.contains(user)){
             throw new PlayerAlreadyInGame();
         }
         if (gameStatus != GameStatus.WaitingPlayers){
             throw new CanNotJoinGame();
         }
-        usersIds.add(user);
+        usersNicknames.add(user);
 
-        if (usersIds.size() == maxPlayersCount){
+        if (usersNicknames.size() == maxPlayersCount){
             gameStatus = GameStatus.Playing;
         }
     }
 
-    private User owner;
+    private String owner;
     private String gameId;
     private int maxPlayersCount;
 
     private GameStatus gameStatus;
-    private List<User> usersIds;
+    private List<String> usersNicknames;
 }
