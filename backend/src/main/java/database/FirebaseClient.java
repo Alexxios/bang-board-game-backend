@@ -3,7 +3,9 @@ package database;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
+import com.google.firestore.v1.Write;
 
+import javax.swing.text.Document;
 import java.util.concurrent.ExecutionException;
 
 public class FirebaseClient {
@@ -23,6 +25,11 @@ public class FirebaseClient {
         return collectionReference.add(object).get();
     }
 
+    public static <T> DocumentReference addToCollection(CollectionReference collectionReference, String documentName, T object) throws ExecutionException, InterruptedException {
+        collectionReference.document(documentName).set(object).get();
+        return collectionReference.document(documentName).get().get().getReference();
+    }
+
     public static String deleteFormDocument(DocumentReference documentReference) throws ExecutionException, InterruptedException {
         ApiFuture<WriteResult> result = documentReference.delete();
         return result.get().getUpdateTime().toString();
@@ -38,6 +45,11 @@ public class FirebaseClient {
 
     public static DocumentReference getDocument(CollectionReference collectionReference, String documentName){
         return collectionReference.document(documentName);
+    }
+
+    public static void deleteDocument(CollectionReference collectionReference, String documentName){
+        DocumentReference documentReference = collectionReference.document(documentName);
+        documentReference.delete();
     }
 
     public static DocumentSnapshot getDocumentSnapshot(CollectionReference collectionReference, String documentName) throws ExecutionException, InterruptedException {

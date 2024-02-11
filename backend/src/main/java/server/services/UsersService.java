@@ -1,6 +1,7 @@
 package server.services;
 
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import database.FirebaseClient;
 import models.User;
@@ -30,9 +31,14 @@ public class UsersService {
         return false;
     }
 
-    public String addUser(String userId) throws ExecutionException, InterruptedException {
+    public void deleteUser(String nickname) {
         CollectionReference collection = FirebaseClient.getCollection(collectionName);
-        FirebaseClient.addToCollection(collection, userId);
-        return userId;
+        FirebaseClient.deleteDocument(collection, nickname);
+    }
+
+    public User addUser(User user) throws ExecutionException, InterruptedException {
+        CollectionReference collection = FirebaseClient.getCollection(collectionName);
+        FirebaseClient.addToCollection(collection, user.getNickname(), user);
+        return user;
     }
 }
