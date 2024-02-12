@@ -5,19 +5,16 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import server.BackendApplication;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 public class FirebaseAuth {
     public static void authorizeFirebase() throws IOException {
         ClassLoader classLoader = BackendApplication.class.getClassLoader();
+        InputStream serviceAccount = Objects.requireNonNull(classLoader.getResourceAsStream("serviceAccountKey.json"));
 
-        File file = new File(Objects.requireNonNull(classLoader.getResource("serviceAccountKey.json")).getFile());
-        FileInputStream serviceAccount = new FileInputStream(file.getAbsoluteFile());
-
-        FirebaseOptions options = new FirebaseOptions.Builder()
+        FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .build();
 
