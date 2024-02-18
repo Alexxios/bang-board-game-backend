@@ -4,21 +4,18 @@ import exceptions.game_exceptions.CanNotJoinGame;
 import exceptions.game_exceptions.FullGame;
 import exceptions.game_exceptions.PlayerAlreadyInGame;
 import lombok.Getter;
+import models.enums.GameStatus;
+import models.enums.Status;
 
 import java.util.ArrayList;
 import java.util.List;
-
-enum GameStatus{
-    WaitingPlayers,
-    Playing,
-    Ended
-}
+import java.util.Objects;
 
 @Getter
 public class GameId {
 
     public GameId() {
-        usersNicknames = new ArrayList<>();
+        players = new ArrayList<>();
         gameStatus = GameStatus.WaitingPlayers;
     }
 
@@ -26,29 +23,46 @@ public class GameId {
         this.owner = owner;
         this.gameId = gameId;
         this.maxPlayersCount = maxPlayersCount;
-        usersNicknames = new ArrayList<>();
-        usersNicknames.add(owner);
+        players = new ArrayList<>();
+        players.add(new PlayerId(owner));
         gameStatus = GameStatus.WaitingPlayers;
     }
 
-//    public int getCurrentPlayersCount() {
-//        return usersNicknames.size();
-//    }
+    public int getPlayersCount() {
+        return players.size();
+    }
 
-    public void addPlayer(String user) throws FullGame, PlayerAlreadyInGame, CanNotJoinGame {
-        if (usersNicknames.size() == maxPlayersCount){
+    public void addPlayer(PlayerId player) throws FullGame, PlayerAlreadyInGame, CanNotJoinGame {
+        if (players.size() == maxPlayersCount){
             throw new FullGame();
         }
-        if (usersNicknames.contains(user)){
+        if (players.contains(player)){
             throw new PlayerAlreadyInGame();
         }
         if (gameStatus != GameStatus.WaitingPlayers){
             throw new CanNotJoinGame();
         }
-        usersNicknames.add(user);
+        players.add(player);
 
-        if (usersNicknames.size() == maxPlayersCount){
+        if (players.size() == maxPlayersCount){
             gameStatus = GameStatus.Playing;
+        }
+    }
+
+    public void changePlayerStatus(String nickname){
+        for (PlayerId player : players){
+            if (Objects.equals(player.getNickname(), nickname)){
+                player.changeStatus();
+            }
+        }
+    }
+
+    public void deleteUser(String nickname){
+        for (PlayerId player : players){
+            if (Objects.equals(player.getNickname(), nickname)){
+                players.remove(player);
+                break;
+            }
         }
     }
 
@@ -57,5 +71,5 @@ public class GameId {
     private int maxPlayersCount;
 
     private GameStatus gameStatus;
-    private List<String> usersNicknames;
+    private List<PlayerId> players;
 }

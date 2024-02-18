@@ -36,6 +36,11 @@ public class GameRegistrationController {
         return new EnterGameResult(true);
     }
 
+    @DeleteMapping("/delete-game")
+    public void deleteGame(@RequestParam String gameId) {
+        gamesService.deleteGame(gameId);
+    }
+
     @GetMapping("get-game")
     public GameId getGame(@RequestParam String gameId) throws ExecutionException, InterruptedException {
         return gamesService.getGame(gameId);
