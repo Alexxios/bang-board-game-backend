@@ -28,10 +28,6 @@ public class GameId {
         gameStatus = GameStatus.WaitingPlayers;
     }
 
-    public int getPlayersCount() {
-        return players.size();
-    }
-
     public void addPlayer(PlayerId player) throws FullGame, PlayerAlreadyInGame, CanNotJoinGame {
         if (players.size() == maxPlayersCount){
             throw new FullGame();
@@ -69,7 +65,7 @@ public class GameId {
     private String owner;
     private String gameId;
     private int maxPlayersCount;
-
+    private int playersCount;
     private GameStatus gameStatus;
     private List<PlayerId> players;
 }

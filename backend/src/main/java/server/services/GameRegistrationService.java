@@ -58,7 +58,7 @@ public class GameRegistrationService {
             GameId game = document.toObject(GameId.class);
             game.addPlayer(new PlayerId(user));
             documentReference.set(game);
-            playersCount = game.getPlayersCount();
+            playersCount = game.getPlayers().size();
         }else{
             throw new GameDoesNotExist();
         }

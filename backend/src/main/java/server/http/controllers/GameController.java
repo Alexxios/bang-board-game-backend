@@ -18,7 +18,7 @@ public class GameController {
     }
 
     @PostMapping("init-game")
-    public void initGame(@RequestParam String gameId){
+    public void initGame(@RequestBody String gameId){
         gameService.initGame(gameId);
     }
 
