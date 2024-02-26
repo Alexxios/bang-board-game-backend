@@ -2,7 +2,16 @@ package models.cards;
 
 import models.Event;
 import models.GameEntity;
+import models.enums.Suits;
 
-public interface ICard {
-    GameEntity handlerEvent(GameEntity game, Event event);
+import java.awt.color.ICC_ColorSpace;
+
+public abstract class ICard {
+    public ICard(int copiesCount){
+        this.copiesCount = copiesCount;
+    }
+    protected int copiesCount;
+    protected int cardNumber;
+    protected Suits suit;
+    public abstract GameEntity handlerEvent(GameEntity game, Event event);
 }

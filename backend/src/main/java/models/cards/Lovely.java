@@ -3,11 +3,10 @@ package models.cards;
 import models.Event;
 import models.GameEntity;
 
-public class Prison extends ICard {
+public class Lovely extends ICard{
+    private static final int copiesCount = 4;
 
-    private static final int copiesCount = 3;
-
-    public Prison(){
+    public Lovely(){
         super(copiesCount);
     }
 

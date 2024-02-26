@@ -4,8 +4,15 @@ import callbacks.CallbackType;
 import models.Callback;
 import models.Event;
 import models.GameEntity;
+import models.enums.Suits;
 
-public class Bang implements ICard {
+public class Bang extends ICard {
+
+    private static final int copiesCount = 25;
+
+    public Bang(){
+        super(copiesCount);
+    }
 
     @Override
     public GameEntity handlerEvent(GameEntity game, Event event) {
