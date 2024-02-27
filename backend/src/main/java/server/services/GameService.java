@@ -6,8 +6,11 @@ import callbacks.handlers.ICallbackHandler;
 import cards.CardMapper;
 import cards.PlayingCard;
 import cards.Role;
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
 import database.FirebaseClient;
 import exceptions.game_exceptions.GameDoesNotExist;
 import helpers.CardsGenerator;
@@ -83,6 +86,12 @@ public class GameService {
         resetCallback(game);
         documentReference.set(game);
         return game;
+    }
+
+    public GameEntity getGame(String gameId) throws ExecutionException, InterruptedException {
+        DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
+        ApiFuture<DocumentSnapshot> documentSnapshot = documentReference.get();
+        return documentSnapshot.get().toObject(GameEntity.class);
     }
 
     private GameEntity getGameEntity(DocumentReference documentReference) throws ExecutionException, InterruptedException, GameDoesNotExist {

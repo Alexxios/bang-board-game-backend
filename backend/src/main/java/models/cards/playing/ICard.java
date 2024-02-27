@@ -13,5 +13,10 @@ public abstract class ICard {
     protected int copiesCount;
     protected int cardNumber;
     protected Suits suit;
+
+    public int getCardCopies(){
+        return copiesCount;
+    }
+
     public abstract GameEntity handlerEvent(GameEntity game, Event event);
 }
