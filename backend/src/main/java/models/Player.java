@@ -4,7 +4,6 @@ import cards.PlayingCard;
 import cards.Role;
 import lombok.Getter;
 import lombok.Setter;
-import models.cards.ICard;
 
 import java.util.List;
 

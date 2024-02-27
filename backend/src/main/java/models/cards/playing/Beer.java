@@ -1,9 +1,8 @@
-package models.cards;
+package models.cards.playing;
 
 import models.Event;
 import models.GameEntity;
 import models.Player;
-import org.springframework.expression.spel.ast.BeanReference;
 
 public class Beer extends ICard{
 

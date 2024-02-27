@@ -1,12 +1,12 @@
-package models.cards;
+package models.cards.playing;
 
 import models.Event;
 import models.GameEntity;
 
-public class Miss extends ICard {
-    private static final int copiesCount = 12;
+public class Barile extends ICard{
+    private static final int copiesCount = 2;
 
-    public Miss(){
+    public Barile(){
         super(copiesCount);
     }
 

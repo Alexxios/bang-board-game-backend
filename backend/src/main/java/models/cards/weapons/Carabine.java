@@ -1,12 +1,13 @@
-package models.cards;
+package models.cards.weapons;
 
 import models.Event;
 import models.GameEntity;
+import models.cards.playing.ICard;
 
-public class Lovely extends ICard{
-    private static final int copiesCount = 4;
+public class Carabine extends ICard implements IWeapon{
+    private final static int copiesCount = 1;
 
-    public Lovely(){
+    public Carabine(){
         super(copiesCount);
     }
 

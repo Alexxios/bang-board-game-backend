@@ -2,19 +2,21 @@ package cards;
 
 public enum PlayingCard {
     //weapons
-    Colt,
+    Winchester,
     Remington,
-    Volkanik,
+    Volcanic,
+    Carabine,
+    Schofield,
 
     //basic cards
     Bang,
     Miss,
     Beer,
     Saloon,
-    Diligence,
+    Diligenza,
     WellsFargo,
     Panic,
-    Babe,
+    Lovely,
     Gatling,
     Indians,
     Duel,
@@ -24,5 +26,6 @@ public enum PlayingCard {
     Mustang,
     Aim,
     Prison,
-    Dynamite
+    Dinamite,
+    Barile
 }

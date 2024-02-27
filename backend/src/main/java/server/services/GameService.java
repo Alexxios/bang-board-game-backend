@@ -15,7 +15,7 @@ import helpers.RolesGenerator;
 import models.Event;
 import models.GameEntity;
 import models.Player;
-import models.cards.ICard;
+import models.cards.playing.ICard;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

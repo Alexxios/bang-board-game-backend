@@ -1,12 +1,12 @@
-package models.cards;
+package models.cards.playing;
 
 import models.Event;
 import models.GameEntity;
 
-public class Shop extends ICard{
-    private static final int copiesCount = 2;
+public class Panic extends ICard{
+    private static final int copiesCount = 4;
 
-    public Shop(){
+    public Panic(){
         super(copiesCount);
     }
 

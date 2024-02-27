@@ -1,13 +1,12 @@
-package models.cards;
+package models.cards.playing;
 
 import models.Event;
 import models.GameEntity;
 
-public class Indians extends ICard{
-
+public class Mustang extends ICard{
     private static final int copiesCount = 2;
 
-    public Indians(){
+    public Mustang(){
         super(copiesCount);
     }
 

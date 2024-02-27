@@ -1,12 +1,12 @@
-package models.cards;
+package models.cards.playing;
 
 import models.Event;
 import models.GameEntity;
 
-public class Mustang extends ICard{
+public class Shop extends ICard{
     private static final int copiesCount = 2;
 
-    public Mustang(){
+    public Shop(){
         super(copiesCount);
     }
 

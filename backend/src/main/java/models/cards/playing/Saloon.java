@@ -1,12 +1,12 @@
-package models.cards;
+package models.cards.playing;
 
 import models.Event;
 import models.GameEntity;
 
-public class Dinamite extends ICard{
+public class Saloon extends ICard{
     private static final int copiesCount = 1;
 
-    public Dinamite(){
+    public Saloon(){
         super(copiesCount);
     }
 

@@ -1,12 +1,13 @@
-package models.cards;
+package models.cards.weapons;
 
 import models.Event;
 import models.GameEntity;
+import models.cards.playing.ICard;
 
-public class WellsFargo extends ICard{
-    private static final int copiesCount = 1;
+public class Remington extends ICard implements IWeapon{
+    private final static int copiesCount = 1;
 
-    public WellsFargo(){
+    public Remington(){
         super(copiesCount);
     }
 

@@ -1,10 +1,9 @@
-package models.cards;
+package models.cards.playing;
 
 import callbacks.CallbackType;
 import models.Callback;
 import models.Event;
 import models.GameEntity;
-import models.enums.Suits;
 
 public class Bang extends ICard {
 
