@@ -18,7 +18,7 @@ public class GameController {
     }
 
     @PostMapping("init-game")
-    public void initGame(@RequestBody String gameId){
+    public void initGame(@RequestBody String gameId) throws ExecutionException, InterruptedException {
         gameService.initGame(gameId);
     }
 

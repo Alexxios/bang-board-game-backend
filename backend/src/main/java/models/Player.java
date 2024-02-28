@@ -20,6 +20,7 @@ public class Player {
         this.distance = 1;
         this.shootDamage = 1;
         this.maxHealth = role.getHealth();
+        this.weapon = PlayingCard.Schofield;
     }
 
     public void getCard(PlayingCard card){
@@ -45,6 +46,7 @@ public class Player {
     private final Role role;
     private int health;
     private int maxHealth;
+    private PlayingCard weapon;
     private int distance;
     @Setter
     private int shootDamage;

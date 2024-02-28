@@ -7,31 +7,36 @@ import cards.CardMapper;
 import cards.PlayingCard;
 import cards.Role;
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.*;
 import database.FirebaseClient;
 import exceptions.game_exceptions.GameDoesNotExist;
 import helpers.CardsGenerator;
 import helpers.RolesGenerator;
-import models.Event;
-import models.GameEntity;
-import models.Player;
+import models.*;
 import models.cards.playing.ICard;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 @Service
 public class GameService {
 
-    private static final String gamesCollectionName = "games";
+    private static final String collectionName = "games";
 
-    public void initGame(String gameId) {
-        DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
+    public void initGame(String gameId) throws ExecutionException, InterruptedException {
+
+        CollectionReference collection = FirebaseClient.getCollection(collectionName);
+        List<QueryDocumentSnapshot> games = collection.get().get().getDocuments();
+        for (QueryDocumentSnapshot document : games){
+            if (Objects.equals(document.getId(), gameId)){
+                return;
+            }
+        }
+
+        DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
         List<PlayingCard> cards = CardsGenerator.generateCards();
         List<Role> roles = RolesGenerator.generateRoles(4);
         List<Player> players = new ArrayList<Player>();
@@ -45,7 +50,7 @@ public class GameService {
     }
 
     public GameEntity handleEvent(String gameId, Event event) throws ExecutionException, InterruptedException, GameDoesNotExist {
-        DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
+        DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
         GameEntity game = getGameEntity(documentReference);
 
         if (game.getCallback().isActive()){
@@ -69,14 +74,14 @@ public class GameService {
     }
 
     public GameEntity nextMotion(String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
-        DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
+        DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
         GameEntity game = getGameEntity(documentReference);
         game.nextMotion();
         return game;
     }
 
     public GameEntity resetCallback(String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
-        DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
+        DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
         GameEntity game = getGameEntity(documentReference);
 
         CallbackType callbackType = game.getCallback().getCallbackType();
@@ -89,7 +94,7 @@ public class GameService {
     }
 
     public GameEntity getGame(String gameId) throws ExecutionException, InterruptedException {
-        DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
+        DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
         ApiFuture<DocumentSnapshot> documentSnapshot = documentReference.get();
         return documentSnapshot.get().toObject(GameEntity.class);
     }
