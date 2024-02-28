@@ -1,13 +1,13 @@
-package models.cards.playing;
+package models.cards.active;
 
 import models.Event;
 import models.GameEntity;
+import models.cards.Card;
 
-public class Panic extends ICard{
-    private static final int copiesCount = 4;
+public class Saloon extends Card {
 
-    public Panic(){
-        super(copiesCount);
+    public Saloon(Rank rank, Suit suit) {
+        super(rank, suit);
     }
 
     @Override

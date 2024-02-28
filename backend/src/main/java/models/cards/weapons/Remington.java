@@ -1,18 +1,12 @@
 package models.cards.weapons;
 
-import models.Event;
-import models.GameEntity;
-import models.cards.playing.ICard;
+import models.cards.Weapon;
 
-public class Remington extends ICard implements IWeapon{
-    private final static int copiesCount = 1;
-
-    public Remington(){
-        super(copiesCount);
+public class Remington extends Weapon {
+    static {
+        distance = 3;
     }
-
-    @Override
-    public GameEntity handlerEvent(GameEntity game, Event event) {
-        return game;
+    public Remington(Rank rank, Suit suit) {
+        super(rank, suit);
     }
 }

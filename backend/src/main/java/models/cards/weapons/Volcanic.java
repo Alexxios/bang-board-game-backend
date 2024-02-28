@@ -1,18 +1,9 @@
 package models.cards.weapons;
 
-import models.Event;
-import models.GameEntity;
-import models.cards.playing.ICard;
+import models.cards.Weapon;
 
-public class Volcanic extends ICard implements IWeapon{
-    public final static int copiesCount = 2;
-
-    public Volcanic(){
-        super(copiesCount);
-    }
-
-    @Override
-    public GameEntity handlerEvent(GameEntity game, Event event) {
-        return game;
+public class Volcanic extends Weapon {
+    public Volcanic(Rank rank, Suit suit) {
+        super(rank, suit);
     }
 }

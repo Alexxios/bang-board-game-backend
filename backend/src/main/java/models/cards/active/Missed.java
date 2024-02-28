@@ -1,13 +1,13 @@
-package models.cards.playing;
+package models.cards.active;
 
 import models.Event;
 import models.GameEntity;
+import models.cards.Card;
 
-public class Barile extends ICard{
-    private static final int copiesCount = 2;
+public class Missed extends Card {
 
-    public Barile(){
-        super(copiesCount);
+    public Missed(Rank rank, Suit suit) {
+        super(rank, suit);
     }
 
     @Override

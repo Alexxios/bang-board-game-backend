@@ -1,13 +1,13 @@
-package models.cards.playing;
+package models.cards.passive;
 
 import models.Event;
 import models.GameEntity;
+import models.cards.Card;
 
-public class Gatling extends ICard{
-    private static final int copiesCount = 1;
+public class Mustang extends Card {
 
-    public Gatling(){
-        super(copiesCount);
+    public Mustang(Rank rank, Suit suit) {
+        super(rank, suit);
     }
 
     @Override

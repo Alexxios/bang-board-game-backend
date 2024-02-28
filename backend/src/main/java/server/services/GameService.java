@@ -15,7 +15,7 @@ import helpers.RolesGenerator;
 import models.Event;
 import models.GameEntity;
 import models.Player;
-import models.cards.playing.ICard;
+import models.cards.Card;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class GameService {
         DocumentReference documentReference = FirebaseClient.getDocument(gamesCollectionName, gameId);
         List<PlayingCard> cards = CardsGenerator.generateCards();
         List<Role> roles = RolesGenerator.generateRoles(4);
-        List<Player> players = new ArrayList<Player>();
+        List<Player> players = new ArrayList<>();
 
         for(Role role : roles){
             players.add(new Player(role));
@@ -57,7 +57,7 @@ public class GameService {
             game.setMotionPlayerIndex(game.getCallback().getEvent().getSenderIndex());
             resetCallback(game);
         }else{
-            ICard card = CardMapper.searchCard(event.getCardDescription());
+            Card card = CardMapper.searchCard(event.getCardDescription());
             card.handlerEvent(game, event);
         }
 

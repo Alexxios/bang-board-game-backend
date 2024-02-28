@@ -1,16 +1,15 @@
-package models.cards.playing;
+package models.cards.active;
 
 import models.Event;
 import models.GameEntity;
 import models.Player;
+import models.cards.Card;
 
-public class Beer extends ICard{
-
+public class Beer extends Card {
     private static final int healthBoost = 1;
-    private static final int copiesCount = 6;
 
-    public Beer(){
-        super(copiesCount);
+    public Beer(Rank rank, Suit suit) {
+        super(rank, suit);
     }
 
     @Override

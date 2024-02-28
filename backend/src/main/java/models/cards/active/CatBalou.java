@@ -1,14 +1,13 @@
-package models.cards.playing;
+package models.cards.active;
 
 import models.Event;
 import models.GameEntity;
+import models.cards.Card;
 
-public class Prison extends ICard {
+public class CatBalou extends Card {
 
-    private static final int copiesCount = 3;
-
-    public Prison(){
-        super(copiesCount);
+    public CatBalou(Rank rank, Suit suit) {
+        super(rank, suit);
     }
 
     @Override

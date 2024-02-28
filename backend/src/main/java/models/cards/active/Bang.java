@@ -1,16 +1,15 @@
-package models.cards.playing;
+package models.cards.active;
 
 import callbacks.CallbackType;
 import models.Callback;
 import models.Event;
 import models.GameEntity;
+import models.cards.Card;
 
-public class Bang extends ICard {
+public class Bang extends Card {
 
-    private static final int copiesCount = 25;
-
-    public Bang(){
-        super(copiesCount);
+    public Bang(Rank rank, Suit suit) {
+        super(rank, suit);
     }
 
     @Override

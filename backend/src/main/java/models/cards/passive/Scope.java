@@ -1,14 +1,12 @@
-package models.cards.playing;
+package models.cards.passive;
 
 import models.Event;
 import models.GameEntity;
+import models.cards.Card;
 
-public class Indians extends ICard{
-
-    private static final int copiesCount = 2;
-
-    public Indians(){
-        super(copiesCount);
+public class Scope extends Card {
+    public Scope(Rank rank, Suit suit) {
+        super(rank, suit);
     }
 
     @Override

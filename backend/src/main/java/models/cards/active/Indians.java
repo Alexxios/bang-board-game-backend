@@ -1,13 +1,13 @@
-package models.cards.playing;
+package models.cards.active;
 
 import models.Event;
 import models.GameEntity;
+import models.cards.Card;
 
-public class Lovely extends ICard{
-    private static final int copiesCount = 4;
+public class Indians extends Card {
 
-    public Lovely(){
-        super(copiesCount);
+    public Indians(Rank rank, Suit suit) {
+        super(rank, suit);
     }
 
     @Override

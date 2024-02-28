@@ -1,13 +1,13 @@
-package models.cards.playing;
+package models.cards.passive;
 
 import models.Event;
 import models.GameEntity;
+import models.cards.Card;
 
-public class Aim extends ICard{
-    private static final int copiesCount = 1;
+public class Jail extends Card {
 
-    public Aim(){
-        super(copiesCount);
+    public Jail(Rank rank, Suit suit) {
+        super(rank, suit);
     }
 
     @Override

@@ -1,13 +1,13 @@
-package models.cards.playing;
+package models.cards.active;
 
 import models.Event;
 import models.GameEntity;
+import models.cards.Card;
 
-public class Dinamite extends ICard{
-    private static final int copiesCount = 1;
+public class Duel extends Card {
 
-    public Dinamite(){
-        super(copiesCount);
+    public Duel(Rank rank, Suit suit) {
+        super(rank, suit);
     }
 
     @Override
