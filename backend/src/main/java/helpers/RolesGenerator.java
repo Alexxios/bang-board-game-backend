@@ -9,8 +9,8 @@ public class RolesGenerator {
         ArrayList<Role> result = new ArrayList<Role>();
         result.add(Role.Sheriff);
         result.add(Role.Assistant);
-        result.add(Role.Bandit);
-        result.add(Role.Bandit);
+//        result.add(Role.Bandit); // TODO fix this
+//        result.add(Role.Bandit);
         Collections.shuffle(result);
         return result;
     }

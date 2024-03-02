@@ -28,7 +28,7 @@ public class GameController {
     }
 
     @PostMapping("next-motion")
-    public GameEntity nextMotion(@RequestParam String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
+    public GameEntity nextMotion(@RequestBody String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
         return gameService.nextMotion(gameId);
     }
 

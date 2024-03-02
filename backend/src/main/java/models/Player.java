@@ -5,6 +5,7 @@ import cards.Role;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -21,6 +22,7 @@ public class Player {
         this.shootDamage = 1;
         this.maxHealth = role.getHealth();
         this.weapon = PlayingCard.Schofield;
+        this.cards = new ArrayList<>();
     }
 
     public void getCard(PlayingCard card){
@@ -35,7 +37,7 @@ public class Player {
         health -= damage;
     }
 
-    public void getHealth(int value){
+    public void updateHealth(int value){
         health = Math.max(health + value, maxHealth);
     }
 

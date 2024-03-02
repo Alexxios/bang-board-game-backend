@@ -14,7 +14,10 @@ import helpers.CardsGenerator;
 import helpers.RolesGenerator;
 import models.*;
 import models.cards.playing.ICard;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import response.models.NextMotionResult;
+import server.ws.controllers.GameEventsController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +26,9 @@ import java.util.concurrent.ExecutionException;
 
 @Service
 public class GameService {
+
+    @Autowired
+    private GameEventsController gameEventsController;
 
     private static final String collectionName = "games";
 
@@ -38,11 +44,16 @@ public class GameService {
 
         DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
         List<PlayingCard> cards = CardsGenerator.generateCards();
-        List<Role> roles = RolesGenerator.generateRoles(4);
+        List<Role> roles = RolesGenerator.generateRoles(2);
         List<Player> players = new ArrayList<Player>();
 
         for(Role role : roles){
-            players.add(new Player(role));
+            Player newPlayer = new Player(role);
+            for (int i = 0; i < newPlayer.getHealth(); ++i){
+                newPlayer.getCard(cards.getFirst());
+                cards.removeFirst();
+            }
+            players.add(newPlayer);
         }
 
         GameEntity game = new GameEntity(0, players, cards);
@@ -77,6 +88,8 @@ public class GameService {
         DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
         GameEntity game = getGameEntity(documentReference);
         game.nextMotion();
+        FirebaseClient.updateDocument(documentReference, game);
+        gameEventsController.nextMotion(gameId, new NextMotionResult(game.getMotionPlayerIndex()));
         return game;
     }
 
