@@ -1,7 +1,9 @@
 package models.cards.weapons;
 
+import cards.PlayingCard;
 import models.Event;
 import models.GameEntity;
+import models.HandleEventResult;
 import models.cards.playing.ICard;
 
 public class Schofield extends ICard implements IWeapon{
@@ -12,7 +14,15 @@ public class Schofield extends ICard implements IWeapon{
     }
 
     @Override
-    public GameEntity handlerEvent(GameEntity game, Event event) {
-        return game;
+    public HandleEventResult handlerEvent(GameEntity game, Event event) {
+        if (event.getSenderIndex() != event.getGetterIndex()){
+            return new HandleEventResult(false, game);
+        }
+
+        int playerIndex = event.getSenderIndex();
+        PlayingCard card = event.getCardDescription().getCard();
+        game.getPlayers().get(playerIndex).setWeapon(card);
+
+        return new HandleEventResult(true, game);
     }
 }

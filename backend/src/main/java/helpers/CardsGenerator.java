@@ -14,6 +14,9 @@ public class CardsGenerator {
         Random random = new Random();
         for (PlayingCard cardType : PlayingCard.values()){
             ICard card = CardMapper.searchCard(cardType);
+            if (card == null){
+                continue;
+            }
             for (int i = 0; i < card.getCardCopies(); ++i){
                 result.add(cardType);
             }

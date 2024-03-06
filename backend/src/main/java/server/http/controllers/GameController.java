@@ -4,6 +4,7 @@ import exceptions.game_exceptions.GameDoesNotExist;
 import models.Event;
 import models.GameEntity;
 import org.springframework.web.bind.annotation.*;
+import response.models.EventHandlingResult;
 import server.services.GameService;
 
 import java.util.concurrent.ExecutionException;
@@ -23,7 +24,7 @@ public class GameController {
     }
 
     @PostMapping("handle-event")
-    public GameEntity handleEvent(@RequestParam String gameId, @RequestBody Event event) throws GameDoesNotExist, ExecutionException, InterruptedException {
+    public EventHandlingResult handleEvent(@RequestParam String gameId, @RequestBody Event event) throws GameDoesNotExist, ExecutionException, InterruptedException {
         return gameService.handleEvent(gameId, event);
     }
 

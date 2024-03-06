@@ -16,7 +16,10 @@ import models.*;
 import models.cards.playing.ICard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import response.models.EventHandlingResult;
+import response.models.KeepCard;
 import response.models.NextMotionResult;
+import response.models.OnCardPlay;
 import server.ws.controllers.GameEventsController;
 
 import java.util.ArrayList;
@@ -56,13 +59,15 @@ public class GameService {
             players.add(newPlayer);
         }
 
-        GameEntity game = new GameEntity(0, players, cards);
+        GameEntity game = new GameEntity(0, players, cards, gameId);
         documentReference.set(game);
     }
 
-    public GameEntity handleEvent(String gameId, Event event) throws ExecutionException, InterruptedException, GameDoesNotExist {
+    public EventHandlingResult handleEvent(String gameId, Event event) throws ExecutionException, InterruptedException, GameDoesNotExist {
         DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
         GameEntity game = getGameEntity(documentReference);
+        HandleEventResult result;
+        boolean handlingResult = true;
 
         if (game.getCallback().isActive()){
             CallbackType callbackType = game.getCallback().getCallbackType();
@@ -77,19 +82,30 @@ public class GameService {
             resetCallback(game);
         }else{
             ICard card = CardMapper.searchCard(event.getCardDescription());
-            card.handlerEvent(game, event);
+            result = card.handlerEvent(game, event);
+            game = result.game();
+            handlingResult = result.isSuccessful();
         }
 
-        documentReference.set(game);
-        return game;
+        game.getPlayers().get(event.getSenderIndex()).getCards().remove(event.getCardIndex());
+        FirebaseClient.updateDocument(documentReference, game);
+        gameEventsController.cardPlay(gameId, new OnCardPlay(event.getSenderIndex(), event.getCardIndex()));
+        return new EventHandlingResult(handlingResult, event, game);
     }
 
     public GameEntity nextMotion(String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
         DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
         GameEntity game = getGameEntity(documentReference);
-        game.nextMotion();
-        FirebaseClient.updateDocument(documentReference, game);
+
+        List<PlayingCard> addedCardsCount = game.nextMotion();
+
         gameEventsController.nextMotion(gameId, new NextMotionResult(game.getMotionPlayerIndex()));
+
+        for (PlayingCard card : addedCardsCount){
+            gameEventsController.keepCard(gameId, new KeepCard(game.getMotionPlayerIndex(), card));
+        }
+
+        FirebaseClient.updateDocument(documentReference, game);
         return game;
     }
 

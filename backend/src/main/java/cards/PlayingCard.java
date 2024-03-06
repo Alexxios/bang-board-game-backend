@@ -7,6 +7,7 @@ public enum PlayingCard {
     Volcanic,
     Carabine,
     Schofield,
+    Colt,
 
     //basic cards
     Bang,

@@ -2,6 +2,7 @@ package models.cards.playing;
 
 import models.Event;
 import models.GameEntity;
+import models.HandleEventResult;
 import models.enums.Suits;
 
 import java.awt.color.ICC_ColorSpace;
@@ -18,5 +19,5 @@ public abstract class ICard {
         return copiesCount;
     }
 
-    public abstract GameEntity handlerEvent(GameEntity game, Event event);
+    public abstract HandleEventResult handlerEvent(GameEntity game, Event event);
 }

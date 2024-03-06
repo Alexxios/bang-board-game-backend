@@ -2,6 +2,7 @@ package models.cards.playing;
 
 import models.Event;
 import models.GameEntity;
+import models.HandleEventResult;
 
 public class Panic extends ICard{
     private static final int copiesCount = 4;
@@ -11,7 +12,7 @@ public class Panic extends ICard{
     }
 
     @Override
-    public GameEntity handlerEvent(GameEntity game, Event event) {
-        return game;
+    public HandleEventResult handlerEvent(GameEntity game, Event event) {
+        return new HandleEventResult(true, game);
     }
 }

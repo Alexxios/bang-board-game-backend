@@ -2,6 +2,7 @@ package models.cards.playing;
 
 import models.Event;
 import models.GameEntity;
+import models.HandleEventResult;
 import models.Player;
 
 public class Beer extends ICard{
@@ -14,9 +15,9 @@ public class Beer extends ICard{
     }
 
     @Override
-    public GameEntity handlerEvent(GameEntity game, Event event) {
+    public HandleEventResult handlerEvent(GameEntity game, Event event) {
         Player player = game.getPlayer(event.getGetterIndex());
         player.updateHealth(healthBoost);
-        return game;
+        return new HandleEventResult(true, game);
     }
 }

@@ -4,6 +4,7 @@ import callbacks.CallbackType;
 import models.Callback;
 import models.Event;
 import models.GameEntity;
+import models.HandleEventResult;
 
 public class Bang extends ICard {
 
@@ -14,11 +15,11 @@ public class Bang extends ICard {
     }
 
     @Override
-    public GameEntity handlerEvent(GameEntity game, Event event) {
+    public HandleEventResult handlerEvent(GameEntity game, Event event) {
         Callback callback = new Callback(event, CallbackType.Bang);
         game.setCallback(callback);
         game.setMotionPlayerIndex(event.getGetterIndex());
-        return game;
+        return new HandleEventResult(true, game);
     }
 
 

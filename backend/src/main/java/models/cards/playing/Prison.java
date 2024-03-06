@@ -2,6 +2,7 @@ package models.cards.playing;
 
 import models.Event;
 import models.GameEntity;
+import models.HandleEventResult;
 
 public class Prison extends ICard {
 
@@ -12,7 +13,7 @@ public class Prison extends ICard {
     }
 
     @Override
-    public GameEntity handlerEvent(GameEntity game, Event event) {
-        return game;
+    public HandleEventResult handlerEvent(GameEntity game, Event event) {
+        return new HandleEventResult(true, game);
     }
 }

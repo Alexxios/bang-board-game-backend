@@ -3,7 +3,9 @@ package models;
 import cards.PlayingCard;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.tomcat.util.digester.ArrayStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -11,20 +13,24 @@ public class GameEntity {
 
     public GameEntity(){}
 
-    public GameEntity(int motionPlayerIndex, List<Player> players, List<PlayingCard> cards) {
+    public GameEntity(int motionPlayerIndex, List<Player> players, List<PlayingCard> cards, String gameId) {
         this.motionPlayerIndex = motionPlayerIndex;
         this.players = players;
         this.cards = cards;
         this.callback = new Callback();
+        this.gameId = gameId;
     }
 
-    public void nextMotion(){
+    public List<PlayingCard> nextMotion(){
         motionPlayerIndex = (motionPlayerIndex + 1) % players.size();
 
-        for (int i = 0; i < players.get(motionPlayerIndex).getHealth(); ++i){
+        ArrayList<PlayingCard> addedCards = new ArrayList<>();
+        for (int i =  players.get(motionPlayerIndex).getCards().size(); i < players.get(motionPlayerIndex).getHealth(); ++i){
             players.get(motionPlayerIndex).getCard(cards.getLast());
+            addedCards.add(cards.getLast());
             cards.removeLast();
         }
+        return addedCards;
     }
 
     public void useCard(int playerIndex, int cardIndex){
@@ -51,4 +57,5 @@ public class GameEntity {
     private List<PlayingCard> cards;
     @Setter
     private Callback callback;
+    private String gameId;
 }

@@ -21,7 +21,7 @@ public class Player {
         this.distance = 1;
         this.shootDamage = 1;
         this.maxHealth = role.getHealth();
-        this.weapon = PlayingCard.Schofield;
+        this.weapon = PlayingCard.Colt;
         this.cards = new ArrayList<>();
     }
 
@@ -48,6 +48,7 @@ public class Player {
     private final Role role;
     private int health;
     private int maxHealth;
+    @Setter
     private PlayingCard weapon;
     private int distance;
     @Setter
