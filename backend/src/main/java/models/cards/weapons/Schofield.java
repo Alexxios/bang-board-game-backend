@@ -7,7 +7,8 @@ import models.HandleEventResult;
 import models.cards.playing.ICard;
 
 public class Schofield extends ICard implements IWeapon{
-    public final static int copiesCount = 3;
+    private final static int copiesCount = 1;
+    private final static int shootingDistance = 2;
 
     public Schofield(){
         super(copiesCount);
@@ -22,6 +23,7 @@ public class Schofield extends ICard implements IWeapon{
         int playerIndex = event.getSenderIndex();
         PlayingCard card = event.getCardDescription().getCard();
         game.getPlayers().get(playerIndex).setWeapon(card);
+        game.getPlayers().get(playerIndex).setShootingDistance(shootingDistance);
 
         return new HandleEventResult(true, game);
     }

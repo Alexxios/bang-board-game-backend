@@ -8,6 +8,7 @@ import models.cards.playing.ICard;
 
 public class Winchester extends ICard implements IWeapon{
     private final static int copiesCount = 1;
+    private final static int shootingDistance = 5;
 
     public Winchester(){
         super(copiesCount);
@@ -22,6 +23,7 @@ public class Winchester extends ICard implements IWeapon{
         int playerIndex = event.getSenderIndex();
         PlayingCard card = event.getCardDescription().getCard();
         game.getPlayers().get(playerIndex).setWeapon(card);
+        game.getPlayers().get(playerIndex).setShootingDistance(shootingDistance);
 
         return new HandleEventResult(true, game);
     }

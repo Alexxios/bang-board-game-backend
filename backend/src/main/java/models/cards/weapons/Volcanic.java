@@ -7,7 +7,8 @@ import models.HandleEventResult;
 import models.cards.playing.ICard;
 
 public class Volcanic extends ICard implements IWeapon{
-    public final static int copiesCount = 2;
+    private final static int copiesCount = 1;
+    private final static int shootingDistance = 1;
 
     public Volcanic(){
         super(copiesCount);
@@ -22,6 +23,7 @@ public class Volcanic extends ICard implements IWeapon{
         int playerIndex = event.getSenderIndex();
         PlayingCard card = event.getCardDescription().getCard();
         game.getPlayers().get(playerIndex).setWeapon(card);
+        game.getPlayers().get(playerIndex).setShootingDistance(shootingDistance);
 
         return new HandleEventResult(true, game);
     }
