@@ -47,6 +47,7 @@ public class Player {
     private PlayingCard weapon;
     @Setter
     private int shootingDistance;
+    private PlayerBuffs buffs;
     @Setter
     private List<PlayingCard> cards;
 }

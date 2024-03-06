@@ -13,6 +13,11 @@ public class Barile extends ICard{
 
     @Override
     public HandleEventResult handlerEvent(GameEntity game, Event event) {
+        if (event.getSenderIndex() != event.getGetterIndex()){
+            return new HandleEventResult(false, game);
+        }
+
+        game.getPlayer(event.getSenderIndex()).getBuffs().setHasBarile(true);
         return new HandleEventResult(true, game);
     }
 }
