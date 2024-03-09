@@ -1,17 +1,13 @@
 package cards;
 
-import configurators.GameEventsConfiguration;
 import configurators.ModelsConfiguration;
 import models.CardDescription;
 import models.cards.playing.*;
 import models.cards.weapons.*;
 import models.cards.playing.Bang;
-import org.apache.catalina.core.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
-import server.ws.controllers.GameEventsController;
 
-import javax.sound.midi.Soundbank;
 import java.util.HashMap;
 
 @Service("cardMapperBean")
@@ -20,9 +16,6 @@ public class CardMapper {
 
     public CardMapper(){
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ModelsConfiguration.class);
-
-//        GameEventsController controller = context.getBean("gameEventsControllerBean", GameEventsController.class);
-//        System.out.println("TEXT" + (controller != null));
 
         // weapons
         cards.put(PlayingCard.Remington, context.getBean("remingtonCardBean", Remington.class));

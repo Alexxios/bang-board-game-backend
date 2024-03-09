@@ -92,8 +92,6 @@ public class GameService {
             handlingResult = result.isSuccessful();
         }
 
-
-
         if (handlingResult){
             game.getPlayer(event.getSenderIndex()).getCards().remove(event.getCardIndex());
             gameEventsController.cardPlay(gameId, new OnCardPlay(event.getSenderIndex(), event.getCardIndex()));
