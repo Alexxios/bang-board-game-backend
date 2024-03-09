@@ -4,11 +4,14 @@ import models.Event;
 import models.GameEntity;
 import models.HandleEventResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import server.ws.controllers.GameEventsController;
 
+@Service
 public class WellsFargo extends ICard{
     private static final int copiesCount = 1;
     private static int cardsCount = 3;
+
     @Autowired
     private GameEventsController gameEventsController;
 

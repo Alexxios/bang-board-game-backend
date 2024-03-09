@@ -22,9 +22,8 @@ public class BangCallbackHandler implements ICallbackHandler {
     public GameEntity negativeAction(GameEntity game) {
         Callback callback = game.getCallback();
         Event event = callback.getEvent();
-        Player shooter = game.getPlayer(event.getSenderIndex());
         Player victim = game.getPlayer(event.getGetterIndex());
-        victim.takeDamage(shooter.getShootDamage());
+        victim.takeDamage(1);
         game.checkPlayer(event.getGetterIndex());
         return game;
     }

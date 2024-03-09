@@ -75,11 +75,11 @@ public class GameService {
 
             if (callback.checkCallback(event)){
                 callback.positiveAction(game);
+                game.setMotionPlayerIndex(game.getCallback().getEvent().getSenderIndex());
+                resetCallback(game);
             }else{
-                callback.negativeAction(game);
+                handlingResult = false;
             }
-            game.setMotionPlayerIndex(game.getCallback().getEvent().getSenderIndex());
-            resetCallback(game);
         }else{
             ICard card = CardMapper.searchCard(event.getCardDescription());
             result = card.handlerEvent(game, event);
@@ -87,15 +87,31 @@ public class GameService {
             handlingResult = result.isSuccessful();
         }
 
-        game.getPlayers().get(event.getSenderIndex()).getCards().remove(event.getCardIndex());
+
+
+        if (handlingResult){
+            game.getPlayer(event.getSenderIndex()).getCards().remove(event.getCardIndex());
+            gameEventsController.cardPlay(gameId, new OnCardPlay(event.getSenderIndex(), event.getCardIndex()));
+        }
+
+        if (game.getMotionPlayerIndex() != event.getSenderIndex()){
+            gameEventsController.nextMotion(game.getGameId(), new NextMotionResult(game.getMotionPlayerIndex()));
+        }
         FirebaseClient.updateDocument(documentReference, game);
-        gameEventsController.cardPlay(gameId, new OnCardPlay(event.getSenderIndex(), event.getCardIndex()));
         return new EventHandlingResult(handlingResult, event, game);
     }
 
     public GameEntity nextMotion(String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
+
         DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
         GameEntity game = getGameEntity(documentReference);
+
+        if (game.getCallback().isActive()){
+            CallbackType callbackType = game.getCallback().getCallbackType();
+            ICallbackHandler callback = CallbackHandlersMapper.searchCallback(callbackType);
+            callback.negativeAction(game);
+            resetCallback(game);
+        }
 
         List<PlayingCard> addedCardsCount = game.nextMotion();
 

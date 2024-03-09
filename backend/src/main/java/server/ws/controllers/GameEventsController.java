@@ -1,11 +1,16 @@
 package server.ws.controllers;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import server.services.GameRegistrationService;
 
-@Service
+@Service("gameEventsController")
 public class GameEventsController {
     private final static String nextMotionUrl = "/next-motion";
     private final static String keepCardUrl = "/keep-card";
@@ -15,6 +20,7 @@ public class GameEventsController {
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+
 
     public <T> void nextMotion(String gameId, T message){
         sendToSubscribers(gameId, nextMotionUrl, message);

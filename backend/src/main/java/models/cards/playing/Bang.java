@@ -1,10 +1,15 @@
 package models.cards.playing;
 
 import callbacks.CallbackType;
-import models.Callback;
-import models.Event;
-import models.GameEntity;
-import models.HandleEventResult;
+import models.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Service;
+import response.models.NextMotionResult;
+import server.ws.controllers.GameEventsController;
+
+import java.sql.SQLOutput;
+
 
 public class Bang extends ICard {
 
@@ -16,11 +21,10 @@ public class Bang extends ICard {
 
     @Override
     public HandleEventResult handlerEvent(GameEntity game, Event event) {
+
         Callback callback = new Callback(event, CallbackType.Bang);
         game.setCallback(callback);
         game.setMotionPlayerIndex(event.getGetterIndex());
         return new HandleEventResult(true, game);
     }
-
-
 }

@@ -3,6 +3,7 @@ package cards;
 import models.CardDescription;
 import models.cards.playing.*;
 import models.cards.weapons.*;
+import models.cards.playing.Bang;
 
 import java.util.HashMap;
 

@@ -11,7 +11,6 @@ public class Diligenza extends ICard{
     private static final int copiesCount = 2;
     private static int cardsCount = 2;
 
-    @Autowired
     private GameEventsController gameEventsController;
 
     public Diligenza(){
