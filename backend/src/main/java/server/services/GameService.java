@@ -15,6 +15,7 @@ import helpers.RolesGenerator;
 import models.*;
 import models.cards.playing.ICard;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 import response.models.EventHandlingResult;
 import response.models.KeepCard;
@@ -81,7 +82,11 @@ public class GameService {
                 handlingResult = false;
             }
         }else{
-            ICard card = CardMapper.searchCard(event.getCardDescription());
+            AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(CardMapper.class);
+
+            CardMapper cardMapper = context.getBean("cardMapperBean", CardMapper.class);
+
+            ICard card = cardMapper.searchCard(event.getCardDescription());
             result = card.handlerEvent(game, event);
             game = result.game();
             handlingResult = result.isSuccessful();

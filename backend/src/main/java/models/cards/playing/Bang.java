@@ -4,13 +4,14 @@ import callbacks.CallbackType;
 import models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import response.models.NextMotionResult;
 import server.ws.controllers.GameEventsController;
 
 import java.sql.SQLOutput;
 
-
+@Component("bangCardBean")
 public class Bang extends ICard {
 
     private static final int copiesCount = 25;

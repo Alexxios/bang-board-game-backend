@@ -4,7 +4,9 @@ import models.Event;
 import models.GameEntity;
 import models.HandleEventResult;
 import models.Player;
+import org.springframework.stereotype.Component;
 
+@Component("beerCardBean")
 public class Beer extends ICard{
 
     private static final int healthBoost = 1;

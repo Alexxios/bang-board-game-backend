@@ -5,7 +5,9 @@ import models.Event;
 import models.GameEntity;
 import models.HandleEventResult;
 import models.cards.playing.ICard;
+import org.springframework.stereotype.Component;
 
+@Component("winchesterCardBean")
 public class Winchester extends ICard implements IWeapon{
     private final static int copiesCount = 1;
     private final static int shootingDistance = 5;

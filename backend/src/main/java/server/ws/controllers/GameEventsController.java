@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import server.services.GameRegistrationService;
 
-@Service("gameEventsController")
+@Service("gameEventsControllerBean")
 public class GameEventsController {
     private final static String nextMotionUrl = "/next-motion";
     private final static String keepCardUrl = "/keep-card";

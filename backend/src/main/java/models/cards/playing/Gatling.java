@@ -4,7 +4,9 @@ import models.Event;
 import models.GameEntity;
 import models.HandleEventResult;
 import models.Player;
+import org.springframework.stereotype.Component;
 
+@Component("gatlingCardBean")
 public class Gatling extends ICard{
     private static final int copiesCount = 1;
 
