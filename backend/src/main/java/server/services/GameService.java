@@ -86,14 +86,7 @@ public class GameService {
             if (callback.checkCallback(event)){
                 callback.positiveAction(game);
 
-                if (game.getCallbacks().size() == 1){
-                    game.setMotionPlayerIndex(game.getCallbacks().getFirst().getEvent().getSenderIndex());
-                    game.resetCallback();
-                } else {
-                    game.resetCallback();
-                    game.setMotionPlayerIndex(game.getCallbacks().getFirst().getEvent().getGetterIndex());
-                }
-
+                changeMotionPlayerIndexWithCallback(game);
             }else{
                 handlingResult = false;
             }
@@ -116,6 +109,7 @@ public class GameService {
         if (game.getMotionPlayerIndex() != event.getSenderIndex()){
             gameEventsController.nextMotion(game.getGameId(), new NextMotionResult(game.getMotionPlayerIndex()));
         }
+        System.out.println(game.getMotionPlayerIndex());
         FirebaseClient.updateDocument(documentReference, game);
         return new EventHandlingResult(handlingResult, event, game);
     }
@@ -126,19 +120,24 @@ public class GameService {
         GameEntity game = getGameEntity(documentReference);
 
         if (!game.getCallbacks().isEmpty()){
-            CallbackType callbackType = game.getCallbacks().getFirst().getCallbackType();
-            ICallbackHandler callback = callbackHandlersMapper.searchCallback(callbackType);
-            callback.negativeAction(game);
-            game.resetCallback();
+            Callback callback = game.getCallbacks().getFirst();
+            CallbackType callbackType = callback.getCallbackType();
+            ICallbackHandler callbackHandler = callbackHandlersMapper.searchCallback(callbackType);
+            callbackHandler.negativeAction(game);
+
+            changeMotionPlayerIndexWithCallback(game);
+            gameEventsController.nextMotion(gameId, new NextMotionResult(callback.getEvent().getSenderIndex()));
+        } else {
+            List<PlayingCard> addedCardsCount = game.nextMotion();
+
+            gameEventsController.nextMotion(gameId, new NextMotionResult(game.getMotionPlayerIndex()));
+
+            for (PlayingCard card : addedCardsCount){
+                gameEventsController.keepCard(gameId, new KeepCard(game.getMotionPlayerIndex(), card));
+            }
+
         }
 
-        List<PlayingCard> addedCardsCount = game.nextMotion();
-
-        gameEventsController.nextMotion(gameId, new NextMotionResult(game.getMotionPlayerIndex()));
-
-        for (PlayingCard card : addedCardsCount){
-            gameEventsController.keepCard(gameId, new KeepCard(game.getMotionPlayerIndex(), card));
-        }
 
         FirebaseClient.updateDocument(documentReference, game);
         return game;
@@ -157,6 +156,16 @@ public class GameService {
         }
 
         return document.toObject(GameEntity.class);
+    }
+
+    private void changeMotionPlayerIndexWithCallback(GameEntity game){
+        if (game.getCallbacks().size() == 1){
+            game.setMotionPlayerIndex(game.getCallbacks().getFirst().getEvent().getSenderIndex());
+            game.resetCallback();
+        } else {
+            game.resetCallback();
+            game.setMotionPlayerIndex(game.getCallbacks().getFirst().getEvent().getGetterIndex());
+        }
     }
 
 }
