@@ -38,7 +38,7 @@ public class Player {
     }
 
     public void updateHealth(int value){
-        health = Math.max(health + value, maxHealth);
+        health = Math.min(health + value, maxHealth);
     }
 
     private final Role role;
