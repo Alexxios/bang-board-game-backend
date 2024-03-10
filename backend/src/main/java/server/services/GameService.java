@@ -2,7 +2,9 @@ package server.services;
 
 import callbacks.CallbackHandlersMapper;
 import callbacks.CallbackType;
-import callbacks.handlers.ICallbackHandler;
+import configurators.CallbacksConfiguration;
+import configurators.ModelsConfiguration;
+import models.callbacks.handlers.ICallbackHandler;
 import cards.CardMapper;
 import cards.PlayingCard;
 import cards.Role;
@@ -34,9 +36,15 @@ public class GameService {
     @Autowired
     private GameEventsController gameEventsController;
 
+    private CallbackHandlersMapper callbackHandlersMapper;
+
     private static final String collectionName = "games";
 
     public void initGame(String gameId) throws ExecutionException, InterruptedException {
+        if (callbackHandlersMapper == null){
+            AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(CallbacksConfiguration.class);
+            this.callbackHandlersMapper = context.getBean("callbackHandlersMapperBean", CallbackHandlersMapper.class);
+        }
 
         CollectionReference collection = FirebaseClient.getCollection(collectionName);
         List<QueryDocumentSnapshot> games = collection.get().get().getDocuments();
@@ -70,14 +78,22 @@ public class GameService {
         HandleEventResult result;
         boolean handlingResult = true;
 
-        if (game.getCallback().isActive()){
-            CallbackType callbackType = game.getCallback().getCallbackType();
-            ICallbackHandler callback = CallbackHandlersMapper.searchCallback(callbackType);
+        if (!game.getCallbacks().isEmpty()){
+
+            CallbackType callbackType = game.getCallbacks().getFirst().getCallbackType();
+            ICallbackHandler callback = callbackHandlersMapper.searchCallback(callbackType);
 
             if (callback.checkCallback(event)){
                 callback.positiveAction(game);
-                game.setMotionPlayerIndex(game.getCallback().getEvent().getSenderIndex());
-                resetCallback(game);
+
+                if (game.getCallbacks().size() == 1){
+                    game.setMotionPlayerIndex(game.getCallbacks().getFirst().getEvent().getSenderIndex());
+                    game.resetCallback();
+                } else {
+                    game.resetCallback();
+                    game.setMotionPlayerIndex(game.getCallbacks().getFirst().getEvent().getSenderIndex());
+                }
+
             }else{
                 handlingResult = false;
             }
@@ -109,11 +125,11 @@ public class GameService {
         DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
         GameEntity game = getGameEntity(documentReference);
 
-        if (game.getCallback().isActive()){
-            CallbackType callbackType = game.getCallback().getCallbackType();
-            ICallbackHandler callback = CallbackHandlersMapper.searchCallback(callbackType);
+        if (!game.getCallbacks().isEmpty()){
+            CallbackType callbackType = game.getCallbacks().getFirst().getCallbackType();
+            ICallbackHandler callback = callbackHandlersMapper.searchCallback(callbackType);
             callback.negativeAction(game);
-            resetCallback(game);
+            game.resetCallback();
         }
 
         List<PlayingCard> addedCardsCount = game.nextMotion();
@@ -125,19 +141,6 @@ public class GameService {
         }
 
         FirebaseClient.updateDocument(documentReference, game);
-        return game;
-    }
-
-    public GameEntity resetCallback(String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
-        DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
-        GameEntity game = getGameEntity(documentReference);
-
-        CallbackType callbackType = game.getCallback().getCallbackType();
-        ICallbackHandler callback = CallbackHandlersMapper.searchCallback(callbackType);
-        callback.negativeAction(game);
-
-        resetCallback(game);
-        documentReference.set(game);
         return game;
     }
 
@@ -156,7 +159,4 @@ public class GameService {
         return document.toObject(GameEntity.class);
     }
 
-    private void resetCallback(GameEntity game) {
-        game.getCallback().reset();
-    }
 }

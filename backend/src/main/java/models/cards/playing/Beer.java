@@ -18,6 +18,9 @@ public class Beer extends ICard{
 
     @Override
     public HandleEventResult handlerEvent(GameEntity game, Event event) {
+        if (event.getSenderIndex() != event.getGetterIndex()){
+            return new HandleEventResult(false, game);
+        }
         Player player = game.getPlayer(event.getGetterIndex());
         player.updateHealth(healthBoost);
         return new HandleEventResult(true, game);

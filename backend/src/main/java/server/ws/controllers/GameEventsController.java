@@ -1,9 +1,11 @@
 package server.ws.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 @Service("gameEventsControllerBean")
+@Scope("singleton")
 public class GameEventsController {
     private final static String nextMotionUrl = "/next-motion";
     private final static String keepCardUrl = "/keep-card";

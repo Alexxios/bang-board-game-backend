@@ -15,6 +15,9 @@ public class Miss extends ICard {
 
     @Override
     public HandleEventResult handlerEvent(GameEntity game, Event event) {
+        if (game.getCallbacks().isEmpty()){
+            return new HandleEventResult(false, game);
+        }
         return new HandleEventResult(true, game);
     }
 }

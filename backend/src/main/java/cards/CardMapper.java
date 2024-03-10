@@ -6,11 +6,13 @@ import models.cards.playing.*;
 import models.cards.weapons.*;
 import models.cards.playing.Bang;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
 @Service("cardMapperBean")
+@Scope("singleton")
 public class CardMapper {
     private final HashMap<PlayingCard, ICard> cards = new HashMap<>();
 

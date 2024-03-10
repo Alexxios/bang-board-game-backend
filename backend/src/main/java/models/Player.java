@@ -4,6 +4,7 @@ import cards.PlayingCard;
 import cards.Role;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class Player {
     private PlayingCard weapon;
     @Setter
     private int shootingDistance;
-    private PlayerBuffs buffs;
+    private PlayerBuffs buffs = new PlayerBuffs();
     @Setter
     private List<PlayingCard> cards;
 }

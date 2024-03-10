@@ -1,18 +1,24 @@
 package callbacks;
 
-import callbacks.handlers.BangCallbackHandler;
-import callbacks.handlers.ICallbackHandler;
+import configurators.ModelsConfiguration;
+import models.callbacks.handlers.BangCallbackHandler;
+import models.callbacks.handlers.ICallbackHandler;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
+@Service("callbackHandlersMapperBean")
 public class CallbackHandlersMapper {
     private static final HashMap<CallbackType, ICallbackHandler> callbacks = new HashMap<>();
 
-    static {
-        callbacks.put(CallbackType.Bang, new BangCallbackHandler());
+    public CallbackHandlersMapper(){
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ModelsConfiguration.class);
+
+        callbacks.put(CallbackType.Bang, context.getBean("bangCallbackHandlerBean", BangCallbackHandler.class));
     }
 
-    public static ICallbackHandler searchCallback(CallbackType callback){
+    public ICallbackHandler searchCallback(CallbackType callback){
         return callbacks.get(callback);
     }
 

@@ -1,11 +1,13 @@
-package callbacks.handlers;
+package models.callbacks.handlers;
 
 import cards.PlayingCard;
 import models.Callback;
 import models.Event;
 import models.GameEntity;
 import models.Player;
+import org.springframework.stereotype.Component;
 
+@Component("bangCallbackHandlerBean")
 public class BangCallbackHandler implements ICallbackHandler {
     @Override
     public boolean checkCallback(Event event) {
@@ -20,7 +22,7 @@ public class BangCallbackHandler implements ICallbackHandler {
 
     @Override
     public GameEntity negativeAction(GameEntity game) {
-        Callback callback = game.getCallback();
+        Callback callback = game.getCallbacks().getFirst();
         Event event = callback.getEvent();
         Player victim = game.getPlayer(event.getGetterIndex());
         victim.takeDamage(1);

@@ -17,7 +17,7 @@ public class GameEntity {
         this.motionPlayerIndex = motionPlayerIndex;
         this.players = players;
         this.cards = cards;
-        this.callback = new Callback();
+        this.callbacks = new ArrayList<>();
         this.gameId = gameId;
     }
 
@@ -48,7 +48,7 @@ public class GameEntity {
     }
 
     public void resetCallback(){
-        this.callback.reset();
+        this.callbacks.removeFirst();
     }
 
     @Setter
@@ -56,6 +56,6 @@ public class GameEntity {
     private List<Player> players;
     private List<PlayingCard> cards;
     @Setter
-    private Callback callback;
+    private List<Callback> callbacks;
     private String gameId;
 }

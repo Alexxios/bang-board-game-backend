@@ -2,5 +2,7 @@ package callbacks;
 
 public enum CallbackType {
     None,
-    Bang
+    Bang,
+    Duel,
+    Panic
 }

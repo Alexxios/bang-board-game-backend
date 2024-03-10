@@ -1,4 +1,4 @@
-package callbacks.handlers;
+package models.callbacks.handlers;
 
 import models.Event;
 import models.GameEntity;
