@@ -14,7 +14,6 @@ public class LovelyCallbackHandler implements ICallbackHandler {
 
     @Override
     public GameEntity positiveAction(GameEntity game) {
-        game.resetCallback();
         return game;
     }
 

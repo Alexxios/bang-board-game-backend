@@ -7,12 +7,11 @@ import models.GameEntity;
 import models.Player;
 import org.springframework.stereotype.Component;
 
-@Component("bangCallbackHandlerBean")
-public class BangCallbackHandler implements ICallbackHandler {
+@Component("indiansCallbackHandlerBean")
+public class IndiansCallbackHandler implements ICallbackHandler {
     @Override
     public boolean checkCallback(Event event) {
-        return event.getCardDescription().getCard() == PlayingCard.Miss ||
-                event.getCardDescription().getCard() == PlayingCard.Beer;
+        return event.getCardDescription().getCard() == PlayingCard.Bang;
     }
 
     @Override

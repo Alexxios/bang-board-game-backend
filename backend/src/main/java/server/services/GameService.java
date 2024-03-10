@@ -91,7 +91,7 @@ public class GameService {
                     game.resetCallback();
                 } else {
                     game.resetCallback();
-                    game.setMotionPlayerIndex(game.getCallbacks().getFirst().getEvent().getSenderIndex());
+                    game.setMotionPlayerIndex(game.getCallbacks().getFirst().getEvent().getGetterIndex());
                 }
 
             }else{

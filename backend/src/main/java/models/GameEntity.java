@@ -51,6 +51,10 @@ public class GameEntity {
         this.callbacks.removeFirst();
     }
 
+    public void addCallback(Callback callback){
+        this.callbacks.add(callback);
+    }
+
     @Setter
     private int motionPlayerIndex;
     private List<Player> players;

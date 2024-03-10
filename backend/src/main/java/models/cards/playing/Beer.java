@@ -22,7 +22,11 @@ public class Beer extends ICard{
             return new HandleEventResult(false, game);
         }
         Player player = game.getPlayer(event.getGetterIndex());
+        int previousHealth = player.getHealth();
         player.updateHealth(healthBoost);
+        if (player.getHealth() == previousHealth){
+            return new HandleEventResult(false, game);
+        }
         return new HandleEventResult(true, game);
     }
 }
