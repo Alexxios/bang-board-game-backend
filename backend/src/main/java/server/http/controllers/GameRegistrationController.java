@@ -20,9 +20,9 @@ public class GameRegistrationController {
         this.gamesService = gamesService;
     }
 
-    @PostMapping("create-game")
-    public String createGame(@RequestBody String user) throws ExecutionException, InterruptedException {
-        return gamesService.createGame(user);
+    @PostMapping("create-game/{nickname}/{playersCount}")
+    public String createGame(@PathVariable String nickname, @PathVariable int playersCount) throws ExecutionException, InterruptedException {
+        return gamesService.createGame(nickname, playersCount);
     }
 
     @GetMapping("enter-the-game/{user}/{gameId}")

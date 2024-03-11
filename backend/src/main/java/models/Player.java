@@ -2,6 +2,7 @@ package models;
 
 import cards.PlayingCard;
 import cards.Role;
+import characters.Character;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +14,17 @@ import java.util.List;
 public class Player {
 
     public Player() {
-        this.role = Role.Sheriff;
+        role = Role.Sheriff;
     }
 
-    public Player(Role role) {
+    public Player(Role role, Character character) {
         this.role = role;
         this.health = role.getHealth();
         this.shootingDistance = 1;
         this.maxHealth = role.getHealth();
         this.weapon = PlayingCard.Colt;
         this.cards = new ArrayList<>();
+        this.character = character;
     }
 
     public void getCard(PlayingCard card){
@@ -51,4 +53,5 @@ public class Player {
     private PlayerBuffs buffs = new PlayerBuffs();
     @Setter
     private List<PlayingCard> cards;
+    private Character character;
 }

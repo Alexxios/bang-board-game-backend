@@ -2,8 +2,10 @@ package server.services;
 
 import callbacks.CallbackHandlersMapper;
 import callbacks.CallbackType;
+import characters.Character;
 import configurators.CallbacksConfiguration;
 import configurators.ModelsConfiguration;
+import helpers.CharactersGenerator;
 import models.callbacks.handlers.ICallbackHandler;
 import cards.CardMapper;
 import cards.PlayingCard;
@@ -40,6 +42,8 @@ public class GameService {
 
     private static final String collectionName = "games";
 
+    private static final String gamesInfoCollectionName = "gamesInfo";
+
     public void initGame(String gameId) throws ExecutionException, InterruptedException {
         if (callbackHandlersMapper == null){
             AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(CallbacksConfiguration.class);
@@ -54,14 +58,19 @@ public class GameService {
             }
         }
 
+        DocumentReference gameIdDocumentreference = FirebaseClient.getDocument(gamesInfoCollectionName, gameId);
+        GameId gameInfo = gameIdDocumentreference.get().get().toObject(GameId.class);
+        int playersCount = gameInfo.getMaxPlayersCount();
+
         DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
         List<PlayingCard> cards = CardsGenerator.generateCards();
-        List<Role> roles = RolesGenerator.generateRoles(2);
+        List<Role> roles = RolesGenerator.generateRoles(playersCount);
+        List<Character> characters = CharactersGenerator.generateCharacters(playersCount);
         List<Player> players = new ArrayList<Player>();
 
-        for(Role role : roles){
-            Player newPlayer = new Player(role);
-            for (int i = 0; i < newPlayer.getHealth(); ++i){
+        for(int i = 0; i < playersCount; ++i){
+            Player newPlayer = new Player(roles.get(i), characters.get(i));
+            for (int j = 0; j < newPlayer.getHealth(); ++j){
                 newPlayer.getCard(cards.getFirst());
                 cards.removeFirst();
             }
@@ -135,9 +144,7 @@ public class GameService {
             for (PlayingCard card : addedCardsCount){
                 gameEventsController.keepCard(gameId, new KeepCard(game.getMotionPlayerIndex(), card));
             }
-
         }
-
 
         FirebaseClient.updateDocument(documentReference, game);
         return game;

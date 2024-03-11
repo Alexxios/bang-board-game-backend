@@ -37,10 +37,10 @@ class GameIdGenerator{
 public class GameRegistrationService {
     static final String collectionName = "gamesInfo";
 
-    public String createGame(String user) throws ExecutionException, InterruptedException {
+    public String createGame(String user, int playersCount) throws ExecutionException, InterruptedException {
         final String gameId = GameIdGenerator.generateGameId(user, 4);
         DocumentReference document = FirebaseClient.getDocument(collectionName, gameId);
-        GameId game = new GameId(user, gameId, 4);
+        GameId game = new GameId(user, gameId, playersCount);
         FirebaseClient.addToDocument(document, game);
         return gameId;
     }
