@@ -1,5 +1,6 @@
 package models.cards.playing;
 
+import cards.PlayingCard;
 import models.Event;
 import models.GameEntity;
 import models.HandleEventResult;
@@ -30,9 +31,9 @@ public class WellsFargo extends ICard{
         int playerIndex = event.getSenderIndex();
 
         for (int i = 0; i < cardsCount; ++i){
-            game.getPlayer(playerIndex).getCard(game.getCards().getLast());
-            gameEventsController.keepCard(game.getGameId(), game.getCards().getLast());
-            game.getCards().removeLast();
+            PlayingCard card = game.drawFirstCard();
+            game.getPlayer(playerIndex).receiveCard(card);
+            gameEventsController.keepCard(game.getGameId(), card);
         }
 
         return new HandleEventResult(true, game);

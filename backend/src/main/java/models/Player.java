@@ -5,7 +5,6 @@ import cards.Role;
 import characters.Character;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +23,11 @@ public class Player {
         this.maxHealth = role.getHealth();
         this.weapon = PlayingCard.Colt;
         this.cards = new ArrayList<>();
+        this.buffs = new PlayerBuffs();
         this.character = character;
     }
 
-    public void getCard(PlayingCard card){
+    public void receiveCard(PlayingCard card){
         cards.add(card);
     }
 
@@ -50,7 +50,7 @@ public class Player {
     private PlayingCard weapon;
     @Setter
     private int shootingDistance;
-    private PlayerBuffs buffs = new PlayerBuffs();
+    private PlayerBuffs buffs;
     @Setter
     private List<PlayingCard> cards;
     private Character character;

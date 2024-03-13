@@ -3,9 +3,9 @@ package models;
 import cards.PlayingCard;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.tomcat.util.digester.ArrayStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -13,10 +13,11 @@ public class GameEntity {
 
     public GameEntity(){}
 
-    public GameEntity(int motionPlayerIndex, List<Player> players, List<PlayingCard> cards, String gameId) {
+    public GameEntity(int motionPlayerIndex, List<Player> players, List<PlayingCard> deck, String gameId) {
         this.motionPlayerIndex = motionPlayerIndex;
         this.players = players;
-        this.cards = cards;
+        this.deck = deck;
+        this.discarded = new ArrayList<>();
         this.callbacks = new ArrayList<>();
         this.gameId = gameId;
     }
@@ -26,9 +27,9 @@ public class GameEntity {
 
         ArrayList<PlayingCard> addedCards = new ArrayList<>();
         for (int i =  players.get(motionPlayerIndex).getCards().size(); i < players.get(motionPlayerIndex).getHealth(); ++i){
-            players.get(motionPlayerIndex).getCard(cards.getLast());
-            addedCards.add(cards.getLast());
-            cards.removeLast();
+            players.get(motionPlayerIndex).receiveCard(deck.getLast());
+            addedCards.add(deck.getLast());
+            deck.removeLast();
         }
         return addedCards;
     }
@@ -55,10 +56,27 @@ public class GameEntity {
         this.callbacks.add(callback);
     }
 
+    /**
+     * Retrieves and removes first card from the {@code deck}. Use this anytime you interact with the {@code deck}.
+     * @return first card from {@code deck}
+     */
+    public PlayingCard drawFirstCard() {
+        if (deck.isEmpty()) resetDeck();
+        PlayingCard card = deck.getFirst();
+        deck.removeFirst();
+        return card;
+    }
+
+    private void resetDeck() {
+        deck.addAll(discarded);
+        discarded.clear();
+        Collections.shuffle(deck);
+    }
+
     @Setter
     private int motionPlayerIndex;
     private List<Player> players;
-    private List<PlayingCard> cards;
+    private List<PlayingCard> deck, discarded;
     @Setter
     private List<Callback> callbacks;
     private String gameId;
