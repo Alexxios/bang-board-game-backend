@@ -1,6 +1,7 @@
 package models.cards.playing;
 
 import callbacks.CallbackType;
+import characters.Character;
 import models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -41,6 +42,11 @@ public class Bang extends ICard {
 
         Callback callback = new Callback(event, CallbackType.Bang);
         game.getCallbacks().add(callback);
+
+        if (game.getPlayer(sender).getCharacter() == Character.AngelEyes){
+            game.getCallbacks().add(callback);
+        }
+
         game.setMotionPlayerIndex(event.getGetterIndex());
         return new HandleEventResult(true, game);
     }
