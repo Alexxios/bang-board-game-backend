@@ -9,9 +9,12 @@ public enum Character {
     LuckyHatch,
     Django,
     Tuco,
+    ColdbloodedRosie,
+    NoNamePerson,
     JesseJames,
     KitCarson,
+    BillyTheKid,
     ElusiveJoe,
     SusieLafayette,
-    TomKetchum
+    TomKetchum,
 }
