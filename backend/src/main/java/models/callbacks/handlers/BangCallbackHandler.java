@@ -1,6 +1,7 @@
 package models.callbacks.handlers;
 
 import cards.PlayingCard;
+import characters.Character;
 import models.Callback;
 import models.Event;
 import models.GameEntity;
@@ -11,11 +12,12 @@ import org.springframework.stereotype.Component;
 public class BangCallbackHandler implements ICallbackHandler {
     @Override
     public boolean checkCallback(GameEntity game, Event event) {
-        boolean result =  event.getCardDescription().getCard() == PlayingCard.Miss ||
-                event.getCardDescription().getCard() == PlayingCard.Beer;
-
-        return event.getCardDescription().getCard() == PlayingCard.Miss ||
-                event.getCardDescription().getCard() == PlayingCard.Beer;
+        PlayingCard card =  event.getCardDescription().getCard();
+        boolean result =  card == PlayingCard.Miss || card == PlayingCard.Beer;
+        if (game.getPlayer(event.getSenderIndex()).getCharacter() == Character.PoorJane){
+            result |= card == PlayingCard.Bang;
+        }
+        return result;
     }
 
     @Override
