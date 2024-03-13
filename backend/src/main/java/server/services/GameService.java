@@ -92,7 +92,7 @@ public class GameService {
             CallbackType callbackType = game.getCallbacks().getFirst().getCallbackType();
             ICallbackHandler callback = callbackHandlersMapper.searchCallback(callbackType);
 
-            if (callback.checkCallback(event)){
+            if (callback.checkCallback(game, event)){
                 callback.positiveAction(game);
 
                 changeMotionPlayerIndexWithCallback(game);

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component("indiansCallbackHandlerBean")
 public class IndiansCallbackHandler implements ICallbackHandler {
     @Override
-    public boolean checkCallback(Event event) {
+    public boolean checkCallback(GameEntity game, Event event) {
         return event.getCardDescription().getCard() == PlayingCard.Bang;
     }
 

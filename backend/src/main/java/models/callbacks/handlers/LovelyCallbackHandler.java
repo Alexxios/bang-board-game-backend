@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component("lovelyCallbackHandlerBean")
 public class LovelyCallbackHandler implements ICallbackHandler {
     @Override
-    public boolean checkCallback(Event event) {
+    public boolean checkCallback(GameEntity game, Event event) {
         return event.getCardDescription().getCard() == PlayingCard.Miss;
     }
 
