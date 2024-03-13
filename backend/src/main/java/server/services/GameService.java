@@ -138,7 +138,7 @@ public class GameService {
             gameEventsController.nextMotion(gameId, new NextMotionResult(callback.getEvent().getSenderIndex()));
         } else {
             List<PlayingCard> addedCardsCount = game.nextMotion();
-
+            game.setWasBangPlayed(false);
             gameEventsController.nextMotion(gameId, new NextMotionResult(game.getMotionPlayerIndex()));
 
             for (PlayingCard card : addedCardsCount){

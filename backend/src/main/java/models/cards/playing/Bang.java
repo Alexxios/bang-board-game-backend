@@ -1,6 +1,7 @@
 package models.cards.playing;
 
 import callbacks.CallbackType;
+import cards.PlayingCard;
 import characters.Character;
 import models.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +25,20 @@ public class Bang extends ICard {
 
     @Override
     public HandleEventResult handlerEvent(GameEntity game, Event event) {
+        if (game.isWasBangPlayed()){
+            return new HandleEventResult(false, game);
+        }
+
         int sender = event.getSenderIndex(), getter = event.getGetterIndex(), playersCount = game.getPlayers().size();
         int weaponDistance = game.getPlayer(sender).getShootingDistance();
         int distance = Math.min(Math.abs(sender - getter), Math.abs(playersCount + sender - getter));
+        Player senderPlayer = game.getPlayer(sender);
 
-        if (game.getPlayer(sender).getCharacter() == Character.ColdbloodedRosie){
+        if (senderPlayer.getCharacter() == Character.ColdbloodedRosie){
             distance++;
         }
 
-        if (game.getPlayer(sender).getBuffs().isHasAim()){
+        if (senderPlayer.getBuffs().isHasAim()){
             distance--;
         }
 
@@ -49,6 +55,13 @@ public class Bang extends ICard {
 
         if (game.getPlayer(sender).getCharacter() == Character.AngelEyes){
             game.getCallbacks().add(callback);
+        }
+
+        boolean canPlayMultipleBang = senderPlayer.getWeapon() == PlayingCard.Volcanic
+                || senderPlayer.getCharacter() == Character.BillyTheKid;
+
+        if (!canPlayMultipleBang){
+            game.setWasBangPlayed(true);
         }
 
         game.setMotionPlayerIndex(event.getGetterIndex());

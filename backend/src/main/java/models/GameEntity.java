@@ -80,4 +80,6 @@ public class GameEntity {
     @Setter
     private List<Callback> callbacks;
     private String gameId;
+    @Setter
+    private boolean wasBangPlayed;
 }
