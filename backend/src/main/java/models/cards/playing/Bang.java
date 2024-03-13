@@ -33,9 +33,14 @@ public class Bang extends ICard {
         int weaponDistance = game.getPlayer(sender).getShootingDistance();
         int distance = Math.min(Math.abs(sender - getter), Math.abs(playersCount + sender - getter));
         Player senderPlayer = game.getPlayer(sender);
+        Player getterPlayer = game.getPlayer(getter);
 
         if (senderPlayer.getCharacter() == Character.ColdbloodedRosie){
             distance++;
+        }
+
+        if (getterPlayer.getCharacter() == Character.ElusiveJoe){
+            distance--;
         }
 
         if (senderPlayer.getBuffs().isHasAim()){
