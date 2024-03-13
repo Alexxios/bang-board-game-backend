@@ -71,7 +71,7 @@ public class GameService {
         for(int i = 0; i < playersCount; ++i){
             Player newPlayer = new Player(roles.get(i), characters.get(i));
             for (int j = 0; j < newPlayer.getHealth(); ++j){
-                newPlayer.getCard(cards.getFirst());
+                newPlayer.receiveCard(cards.getFirst());
                 cards.removeFirst();
             }
             players.add(newPlayer);
