@@ -1,6 +1,7 @@
 package models;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class Event {
@@ -13,7 +14,9 @@ public class Event {
         this.cardIndex = cardIndex;
     }
 
+    @Setter
     private int senderIndex;
+    @Setter
     private int getterIndex;
     private CardDescription cardDescription;
     private int cardIndex;

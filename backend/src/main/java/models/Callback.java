@@ -20,6 +20,7 @@ public class Callback {
         this.callbackType = callbackType;
     }
 
+    @Getter
     private Event event;
     private CallbackType callbackType;
 }

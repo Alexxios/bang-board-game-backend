@@ -1,10 +1,7 @@
 package callbacks;
 
 import configurators.ModelsConfiguration;
-import models.callbacks.handlers.BangCallbackHandler;
-import models.callbacks.handlers.ICallbackHandler;
-import models.callbacks.handlers.IndiansCallbackHandler;
-import models.callbacks.handlers.ShopCallbackHandler;
+import models.callbacks.handlers.*;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +16,7 @@ public class CallbackHandlersMapper {
 
         callbacks.put(CallbackType.Bang, context.getBean("bangCallbackHandlerBean", BangCallbackHandler.class));
         callbacks.put(CallbackType.Indians, context.getBean("indiansCallbackHandlerBean", IndiansCallbackHandler.class));
+        callbacks.put(CallbackType.Duel, context.getBean("duelCallbackHandlerBean", DuelCallbackHandler.class));
         callbacks.put(CallbackType.Shop, context.getBean("shopCallbackHandlerBean", ShopCallbackHandler.class));
     }
 
