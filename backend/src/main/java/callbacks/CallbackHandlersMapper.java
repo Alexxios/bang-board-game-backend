@@ -18,6 +18,8 @@ public class CallbackHandlersMapper {
         callbacks.put(CallbackType.Indians, context.getBean("indiansCallbackHandlerBean", IndiansCallbackHandler.class));
         callbacks.put(CallbackType.Duel, context.getBean("duelCallbackHandlerBean", DuelCallbackHandler.class));
         callbacks.put(CallbackType.Shop, context.getBean("shopCallbackHandlerBean", ShopCallbackHandler.class));
+        callbacks.put(CallbackType.Panic, context.getBean("panicCallbackHandlerBean", PanicCallbackHandler.class));
+        callbacks.put(CallbackType.Lovely, context.getBean("lovelyCallbackHandlerBean", LovelyCallbackHandler.class));
     }
 
     public ICallbackHandler searchCallback(CallbackType callback){

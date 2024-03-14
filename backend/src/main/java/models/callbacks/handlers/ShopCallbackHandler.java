@@ -13,10 +13,8 @@ public class ShopCallbackHandler implements ICallbackHandler {
     @Override
     public boolean checkCallback(GameEntity game, Event event) {
         PlayingCard card = event.getCardDescription().getCard();
-        System.out.println( game.getPlayer(event.getSenderIndex()).getCards().size());
         game.getPlayer(event.getSenderIndex()).getCards().add(card);
         game.getCardsForSelection().remove(event.getCardIndex());
-        System.out.println( game.getPlayer(event.getSenderIndex()).getCards().size());
         return true;
     }
 

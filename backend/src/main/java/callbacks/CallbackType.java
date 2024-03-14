@@ -6,5 +6,6 @@ public enum CallbackType {
     Duel,
     Panic,
     Indians,
-    Shop
+    Shop,
+    Lovely
 }

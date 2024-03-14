@@ -21,6 +21,7 @@ public class Callback {
     }
 
     @Getter
+    @Setter
     private Event event;
     private CallbackType callbackType;
 }

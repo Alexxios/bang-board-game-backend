@@ -1,17 +1,22 @@
 package models.callbacks.handlers;
 
 import cards.PlayingCard;
+import models.Callback;
 import models.Event;
 import models.GameEntity;
 import org.springframework.stereotype.Component;
 
-@Component("lovelyCallbackHandlerBean")
-public class LovelyCallbackHandler implements ICallbackHandler {
+@Component("panicCallbackHandlerBean")
+public class PanicCallbackHandler implements ICallbackHandler {
     @Override
     public boolean checkCallback(GameEntity game, Event event) {
         PlayingCard card = event.getCardDescription().getCard();
         game.getPlayer(event.getSenderIndex()).getCards().add(card);
-        game.getCardsForSelection().remove(event.getCardIndex());
+        Event callbackEvent = game.getCallbacks().getFirst().getEvent();
+        game.getPlayer(callbackEvent.getSenderIndex()).getCards().remove(event.getCardIndex());
+        Event newEvent = new Event(event.getSenderIndex(), event.getGetterIndex(), event.getCardDescription(), event.getCardIndex());
+        game.getCallbacks().getFirst().setEvent(newEvent);
+        game.getCardsForSelection().clear();
         return true;
     }
 
