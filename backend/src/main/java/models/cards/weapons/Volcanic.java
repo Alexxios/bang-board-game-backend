@@ -1,20 +1,31 @@
 package models.cards.weapons;
 
-import cards.PlayingCard;
+import cards.Suit;
+import models.PlayingCard;
 import models.Event;
 import models.GameEntity;
 import models.HandleEventResult;
 import models.cards.playing.ICard;
 import org.springframework.stereotype.Component;
 
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.Map;
+
 @Component("volcanicCardBean")
 public class Volcanic extends ICard implements IWeapon{
     private final static int copiesCount = 1;
     private final static int shootingDistance = 1;
 
+    private final static List<Map.Entry<Suit, Integer>> cardTypesList = List.of(
+            new AbstractMap.SimpleEntry<>(Suit.Spades, 10),
+            new AbstractMap.SimpleEntry<>(Suit.Clubs, 10)
+    );
+
     public Volcanic(){
-        super(copiesCount);
+        super(copiesCount, cardTypesList);
     }
+
 
     @Override
     public HandleEventResult handlerEvent(GameEntity game, Event event) {

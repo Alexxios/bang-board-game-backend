@@ -1,21 +1,32 @@
 package models.cards.playing;
 
 import callbacks.CallbackType;
-import cards.PlayingCard;
+import cards.Suit;
+import models.PlayingCard;
+import cards.PlayingCardName;
 import models.Callback;
 import models.Event;
 import models.GameEntity;
 import models.HandleEventResult;
 import org.springframework.stereotype.Component;
 
+import java.util.AbstractMap;
 import java.util.List;
+import java.util.Map;
 
 @Component("lovelyCardBean")
 public class Lovely extends ICard{
     private static final int copiesCount = 4;
+    private final static List<Map.Entry<Suit, Integer>> cardTypesList = List.of(
+            new AbstractMap.SimpleEntry<>(Suit.Hearts, 13),
+            new AbstractMap.SimpleEntry<>(Suit.Diamonds, 9),
+            new AbstractMap.SimpleEntry<>(Suit.Diamonds, 10),
+            new AbstractMap.SimpleEntry<>(Suit.Diamonds, 11)
+    );
+
 
     public Lovely(){
-        super(copiesCount);
+        super(copiesCount, cardTypesList);
     }
 
     @Override

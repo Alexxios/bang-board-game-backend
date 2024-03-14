@@ -1,6 +1,8 @@
 package helpers;
 import cards.CardMapper;
-import cards.PlayingCard;
+import cards.PlayingCardName;
+import cards.Suit;
+import models.PlayingCard;
 import models.cards.playing.ICard;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -16,14 +18,14 @@ public class CardsGenerator {
         CardMapper cardMapper = context.getBean("cardMapperBean", CardMapper.class);
 
         ArrayList<PlayingCard> result = new ArrayList<>();
-        Random random = new Random();
-        for (PlayingCard cardType : PlayingCard.values()){
+        for (PlayingCardName cardType : PlayingCardName.values()){
             ICard card = cardMapper.searchCard(cardType);
             if (card == null){
                 continue;
             }
             for (int i = 0; i < card.getCardCopies(); ++i){
-                result.add(cardType);
+                Map.Entry<Suit, Integer> pair = card.getCardsTypesList().get(i);
+                result.add(new PlayingCard(cardType, pair.getKey(), pair.getValue()));
             }
         }
         Collections.shuffle(result);

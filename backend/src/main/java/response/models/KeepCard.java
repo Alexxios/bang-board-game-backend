@@ -1,6 +1,6 @@
 package response.models;
 
-import cards.PlayingCard;
+import models.PlayingCard;
 
 public record KeepCard(int playerIndex, PlayingCard card) {
 }

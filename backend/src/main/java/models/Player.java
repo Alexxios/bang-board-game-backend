@@ -1,6 +1,8 @@
 package models;
 
-import cards.PlayingCard;
+import cards.PlayingCardName;
+import cards.Suit;
+import models.PlayingCard;
 import cards.Role;
 import characters.Character;
 import lombok.Getter;
@@ -21,7 +23,7 @@ public class Player {
         this.health = role.getHealth();
         this.shootingDistance = 1;
         this.maxHealth = role.getHealth();
-        this.weapon = PlayingCard.Colt;
+        this.weapon = new PlayingCard(PlayingCardName.Colt, Suit.None, 0);
         this.cards = new ArrayList<>();
         this.buffs = new PlayerBuffs();
         this.character = character;

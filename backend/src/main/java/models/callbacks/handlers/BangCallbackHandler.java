@@ -1,6 +1,7 @@
 package models.callbacks.handlers;
 
-import cards.PlayingCard;
+import cards.PlayingCardName;
+import models.PlayingCard;
 import characters.Character;
 import models.Callback;
 import models.Event;
@@ -13,9 +14,9 @@ public class BangCallbackHandler implements ICallbackHandler {
     @Override
     public boolean checkCallback(GameEntity game, Event event) {
         PlayingCard card =  event.getCardDescription().getCard();
-        boolean result =  card == PlayingCard.Miss || card == PlayingCard.Beer;
+        boolean result =  card.getCardName() == PlayingCardName.Miss || card.getCardName() == PlayingCardName.Beer;
         if (game.getPlayer(event.getSenderIndex()).getCharacter() == Character.PoorJane){
-            result |= card == PlayingCard.Bang;
+            result |= card.getCardName() == PlayingCardName.Bang;
         }
         return result;
     }

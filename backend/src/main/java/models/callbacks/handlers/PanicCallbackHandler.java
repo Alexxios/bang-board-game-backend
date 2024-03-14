@@ -1,6 +1,6 @@
 package models.callbacks.handlers;
 
-import cards.PlayingCard;
+import models.PlayingCard;
 import models.Callback;
 import models.Event;
 import models.GameEntity;

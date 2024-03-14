@@ -1,7 +1,9 @@
 package models.cards.playing;
 
 import callbacks.CallbackType;
-import cards.PlayingCard;
+import cards.PlayingCardName;
+import cards.Suit;
+import models.PlayingCard;
 import characters.Character;
 import models.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +15,32 @@ import server.BackendApplication;
 import server.ws.controllers.GameEventsController;
 
 import java.sql.SQLOutput;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Component("bangCardBean")
 public class Bang extends ICard {
 
     private static final int copiesCount = 25;
+    private final static List<Map.Entry<Suit, Integer>> cardTypesList = new ArrayList<>();
+
+    static {
+        cardTypesList.add(new AbstractMap.SimpleEntry<>(Suit.Spades, 14));
+        for (int i = 2; i <= 14; ++i){
+            cardTypesList.add(new AbstractMap.SimpleEntry<>(Suit.Diamonds, i));
+        }
+        for (int i = 2; i <= 9; ++i){
+            cardTypesList.add(new AbstractMap.SimpleEntry<>(Suit.Clubs, i));
+        }
+        for (int i = 12; i <= 14; ++i){
+            cardTypesList.add(new AbstractMap.SimpleEntry<>(Suit.Hearts, i));
+        }
+    }
 
     public Bang(){
-        super(copiesCount);
+        super(copiesCount, cardTypesList);
     }
 
     @Override
@@ -62,7 +82,7 @@ public class Bang extends ICard {
             game.getCallbacks().add(callback);
         }
 
-        boolean canPlayMultipleBang = senderPlayer.getWeapon() == PlayingCard.Volcanic
+        boolean canPlayMultipleBang = senderPlayer.getWeapon().getCardName() == PlayingCardName.Volcanic
                 || senderPlayer.getCharacter() == Character.BillyTheKid;
 
         if (!canPlayMultipleBang){

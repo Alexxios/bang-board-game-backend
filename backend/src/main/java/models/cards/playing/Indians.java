@@ -1,19 +1,30 @@
 package models.cards.playing;
 
 import callbacks.CallbackType;
+import cards.Suit;
 import models.Callback;
 import models.Event;
 import models.GameEntity;
 import models.HandleEventResult;
 import org.springframework.stereotype.Component;
 
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.Map;
+
 @Component("indiansCardBean")
 public class Indians extends ICard{
 
     private static final int copiesCount = 2;
 
+    private final static List<Map.Entry<Suit, Integer>> cardTypesList = List.of(
+            new AbstractMap.SimpleEntry<>(Suit.Diamonds, 14),
+            new AbstractMap.SimpleEntry<>(Suit.Diamonds, 13)
+    );
+
+
     public Indians(){
-        super(copiesCount);
+        super(copiesCount, cardTypesList);
     }
 
     @Override

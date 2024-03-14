@@ -10,4 +10,5 @@ public class PlayerBuffs {
     private boolean hasMustang;
     private boolean hasAim;
     private boolean hasBarile;
+    private boolean hasPrison;
 }

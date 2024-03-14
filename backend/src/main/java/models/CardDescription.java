@@ -1,6 +1,6 @@
 package models;
 
-import cards.PlayingCard;
+import models.PlayingCard;
 import lombok.Getter;
 
 @Getter

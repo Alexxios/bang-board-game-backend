@@ -1,11 +1,16 @@
 package models.cards.playing;
 
-import cards.PlayingCard;
+import cards.Suit;
+import models.PlayingCard;
 import models.Event;
 import models.GameEntity;
 import models.HandleEventResult;
 import org.springframework.stereotype.Component;
 import server.ws.controllers.GameEventsController;
+
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.Map;
 
 @Component("diligenzaCardBean")
 public class Diligenza extends ICard{
@@ -14,8 +19,13 @@ public class Diligenza extends ICard{
 
     private GameEventsController gameEventsController;
 
+    private final static List<Map.Entry<Suit, Integer>> cardTypesList = List.of(
+            new AbstractMap.SimpleEntry<>(Suit.Spades, 9),
+            new AbstractMap.SimpleEntry<>(Suit.Spades, 9)
+    );
+
     public Diligenza(){
-        super(copiesCount);
+        super(copiesCount, cardTypesList);
     }
 
     @Override

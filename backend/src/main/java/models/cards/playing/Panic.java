@@ -1,21 +1,30 @@
 package models.cards.playing;
 
 import callbacks.CallbackType;
-import cards.PlayingCard;
+import cards.Suit;
+import models.PlayingCard;
 import models.Callback;
 import models.Event;
 import models.GameEntity;
 import models.HandleEventResult;
 import org.springframework.stereotype.Component;
 
+import java.util.AbstractMap;
 import java.util.List;
+import java.util.Map;
 
 @Component("panicCardBean")
 public class Panic extends ICard{
     private static final int copiesCount = 4;
+    private final static List<Map.Entry<Suit, Integer>> cardTypesList = List.of(
+            new AbstractMap.SimpleEntry<>(Suit.Hearts, 11),
+            new AbstractMap.SimpleEntry<>(Suit.Hearts, 12),
+            new AbstractMap.SimpleEntry<>(Suit.Hearts, 14),
+            new AbstractMap.SimpleEntry<>(Suit.Diamonds, 8)
+    );
 
     public Panic(){
-        super(copiesCount);
+        super(copiesCount, cardTypesList);
     }
 
     @Override

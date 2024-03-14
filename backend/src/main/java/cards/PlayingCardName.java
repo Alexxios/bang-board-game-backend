@@ -1,6 +1,6 @@
 package cards;
 
-public enum PlayingCard {
+public enum PlayingCardName {
     ClosedCard,
     //weapons
     Winchester,

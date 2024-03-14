@@ -1,17 +1,29 @@
 package models.cards.playing;
 
 import callbacks.CallbackType;
-import cards.PlayingCard;
+import cards.PlayingCardName;
+import cards.Suit;
+import models.PlayingCard;
 import characters.Character;
 import models.*;
 import org.springframework.stereotype.Component;
+
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.Map;
 
 @Component("duelCardBean")
 public class Duel extends ICard{
     public static final int copiesCount = 3;
 
+    private final static List<Map.Entry<Suit, Integer>> cardTypesList = List.of(
+            new AbstractMap.SimpleEntry<>(Suit.Diamonds, 12),
+            new AbstractMap.SimpleEntry<>(Suit.Spades, 11),
+            new AbstractMap.SimpleEntry<>(Suit.Clubs, 8)
+    );
+
     public Duel(){
-        super(copiesCount);
+        super(copiesCount, cardTypesList);
     }
 
     @Override
@@ -42,7 +54,7 @@ public class Duel extends ICard{
         Player player = game.getPlayer(playerIndex);
         int count = 0;
         for (PlayingCard card : player.getCards()){
-            if (card == PlayingCard.Bang || player.getCharacter() == Character.PoorJane && card == PlayingCard.Miss){
+            if (card.getCardName() == PlayingCardName.Bang || player.getCharacter() == Character.PoorJane && card.getCardName() == PlayingCardName.Miss){
                 count++;
             }
         }
