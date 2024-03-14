@@ -19,6 +19,7 @@ public class GameEntity {
         this.deck = deck;
         this.discarded = new ArrayList<>();
         this.callbacks = new ArrayList<>();
+        this.cardsForSelection = new ArrayList<>();
         this.gameId = gameId;
     }
 
@@ -80,6 +81,8 @@ public class GameEntity {
     @Setter
     private List<Callback> callbacks;
     private String gameId;
+    @Setter
+    private List<PlayingCard> cardsForSelection;
     @Setter
     private boolean wasBangPlayed;
 }

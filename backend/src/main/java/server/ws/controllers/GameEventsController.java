@@ -13,6 +13,8 @@ public class GameEventsController {
     private final static String playerDeathUrl = "/player-death";
     private final static String matchEndUrl = "/match-end";
 
+    private final static String selectCardUrl = "/select-card";
+
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
@@ -36,6 +38,8 @@ public class GameEventsController {
     public <T> void matchEnd(String gameId, T message){
         sendToSubscribers(gameId, matchEndUrl, message);
     }
+
+    public <T> void setSelectCard(String gameId, T message) {sendToSubscribers(gameId, selectCardUrl, message);}
 
     private <T> void sendToSubscribers(String gameId, String url,  T message){
         messagingTemplate.convertAndSendToUser(

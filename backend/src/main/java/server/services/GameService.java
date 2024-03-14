@@ -92,6 +92,10 @@ public class GameService {
             CallbackType callbackType = game.getCallbacks().getFirst().getCallbackType();
             ICallbackHandler callback = callbackHandlersMapper.searchCallback(callbackType);
 
+            if (!game.getCardsForSelection().isEmpty()){
+                handlingResult = false;
+            }
+
             if (callback.checkCallback(game, event)){
                 callback.positiveAction(game);
 
@@ -118,7 +122,6 @@ public class GameService {
         if (game.getMotionPlayerIndex() != event.getSenderIndex()){
             gameEventsController.nextMotion(game.getGameId(), new NextMotionResult(game.getMotionPlayerIndex()));
         }
-        System.out.println(game.getMotionPlayerIndex());
         FirebaseClient.updateDocument(documentReference, game);
         return new EventHandlingResult(handlingResult, event, game);
     }
