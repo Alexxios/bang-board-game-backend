@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 public class LovelyCallbackHandler implements ICallbackHandler {
     @Override
     public boolean checkCallback(GameEntity game, Event event) {
-        PlayingCard card = event.getCardDescription().getCard();
-        game.getPlayer(event.getSenderIndex()).getCards().add(card);
-        game.getCardsForSelection().remove(event.getCardIndex());
+        Event callbackEvent = game.getCallbacks().getFirst().getEvent();
+        game.getPlayer(callbackEvent.getSenderIndex()).getCards().remove(event.getCardIndex());
+        Event newEvent = new Event(event.getSenderIndex(), event.getGetterIndex(), event.getCardDescription(), event.getCardIndex());
+        game.getCallbacks().getFirst().setEvent(newEvent);
+        game.getCardsForSelection().clear();
         return true;
     }
 
