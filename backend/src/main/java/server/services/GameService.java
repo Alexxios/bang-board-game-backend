@@ -140,14 +140,30 @@ public class GameService {
             changeMotionPlayerIndexWithCallback(game);
             gameEventsController.nextMotion(gameId, new NextMotionResult(callback.getEvent().getSenderIndex()));
         } else {
+            int previousPlayer = game.getMotionPlayerIndex();
+
             List<PlayingCard> addedCardsCount = game.nextMotion();
             int playerIndex = game.getMotionPlayerIndex();
             PlayingCard firstCard = game.getDeck().getLast();
             while(game.getPlayer(playerIndex).getBuffs().isHasPrison() && firstCard.getSuit() != Suit.Hearts){
                 game.getDiscarded().add(firstCard);
                 game.getDeck().removeLast();
+                firstCard = game.getDeck().getLast();
                 addedCardsCount = game.nextMotion();
                 playerIndex = game.getMotionPlayerIndex();
+            }
+
+            if (game.getPlayer(previousPlayer).getBuffs().isHasDinamite()){
+                int currentPlayer = game.getMotionPlayerIndex();
+                game.getPlayer(previousPlayer).getBuffs().setHasDinamite(false);
+                game.getPlayer(currentPlayer).getBuffs().setHasDinamite(true);
+
+                if (firstCard.getSuit() == Suit.Spades &&
+                    2 <= firstCard.getNumber() && firstCard.getNumber() <= 9){
+                    game.getPlayer(currentPlayer).getBuffs().setHasDinamite(false);
+                    game.getPlayer(currentPlayer).takeDamage(3);
+                }
+
             }
 
             game.setWasBangPlayed(false);
@@ -161,6 +177,7 @@ public class GameService {
         FirebaseClient.updateDocument(documentReference, game);
         return game;
     }
+
 
     public GameEntity getGame(String gameId) throws ExecutionException, InterruptedException {
         DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);

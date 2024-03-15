@@ -24,6 +24,12 @@ public class Dinamite extends ICard{
 
     @Override
     public HandleEventResult handlerEvent(GameEntity game, Event event) {
+        if (event.getGetterIndex() != event.getSenderIndex()){
+            return new HandleEventResult(false, game);
+        }
+
+        int playerIndex = event.getSenderIndex();
+        game.getPlayer(playerIndex).getBuffs().setHasDinamite(true);
         return new HandleEventResult(true, game);
     }
 }
