@@ -32,7 +32,6 @@ public class IndiansCallbackHandler implements ICallbackHandler {
         Event event = callback.getEvent();
         Player victim = game.getPlayer(event.getGetterIndex());
         victim.takeDamage(1);
-        game.checkPlayer(event.getGetterIndex());
         return game;
     }
 }

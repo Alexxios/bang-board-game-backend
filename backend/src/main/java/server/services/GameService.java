@@ -122,6 +122,19 @@ public class GameService {
         if (game.getMotionPlayerIndex() != event.getSenderIndex()){
             gameEventsController.nextMotion(game.getGameId(), new NextMotionResult(game.getMotionPlayerIndex()));
         }
+
+        List<Integer> deadPlayers = new ArrayList<>();
+        for (int index = 0; index < game.getPlayers().size(); ++index){
+            if (game.getPlayers().get(index).getHealth() <= 0){
+                deadPlayers.add(index);
+                gameEventsController.playerDeath(game.getGameId(), index);
+            }
+        }
+
+        for (int index : deadPlayers){
+            game.getPlayers().remove(index);
+        }
+
         FirebaseClient.updateDocument(documentReference, game);
         return new EventHandlingResult(handlingResult, event, game);
     }

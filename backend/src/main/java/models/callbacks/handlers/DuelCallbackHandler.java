@@ -33,7 +33,6 @@ public class DuelCallbackHandler implements ICallbackHandler {
         Event event = callback.getEvent();
         Player victim = game.getPlayer(event.getGetterIndex());
         victim.takeDamage(1);
-        game.checkPlayer(event.getGetterIndex());
 
 
         for (int i = 0; i < game.getCallbacks().size() - 1; ++i){
