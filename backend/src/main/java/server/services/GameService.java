@@ -2,6 +2,7 @@ package server.services;
 
 import callbacks.CallbackHandlersMapper;
 import callbacks.CallbackType;
+import cards.Suit;
 import characters.Character;
 import configurators.CallbacksConfiguration;
 import helpers.CharactersGenerator;
@@ -140,6 +141,15 @@ public class GameService {
             gameEventsController.nextMotion(gameId, new NextMotionResult(callback.getEvent().getSenderIndex()));
         } else {
             List<PlayingCard> addedCardsCount = game.nextMotion();
+            int playerIndex = game.getMotionPlayerIndex();
+            PlayingCard firstCard = game.getDeck().getLast();
+            while(game.getPlayer(playerIndex).getBuffs().isHasPrison() && firstCard.getSuit() != Suit.Hearts){
+                game.getDiscarded().add(firstCard);
+                game.getDeck().removeLast();
+                addedCardsCount = game.nextMotion();
+                playerIndex = game.getMotionPlayerIndex();
+            }
+
             game.setWasBangPlayed(false);
             gameEventsController.nextMotion(gameId, new NextMotionResult(game.getMotionPlayerIndex()));
 
