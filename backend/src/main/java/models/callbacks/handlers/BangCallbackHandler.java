@@ -1,6 +1,7 @@
 package models.callbacks.handlers;
 
 import cards.PlayingCardName;
+import cards.Suit;
 import models.PlayingCard;
 import characters.Character;
 import models.Callback;
@@ -18,6 +19,13 @@ public class BangCallbackHandler implements ICallbackHandler {
         if (game.getPlayer(event.getSenderIndex()).getCharacter() == Character.PoorJane){
             result |= card.getCardName() == PlayingCardName.Bang;
         }
+
+        if (card.getCardName() == PlayingCardName.Barile && game.getDeck().getLast().getSuit() == Suit.Hearts){
+            int index = event.getCardIndex();
+            game.getPlayer(event.getSenderIndex()).getCards().add(index, card);
+            return true;
+        }
+
         return result;
     }
 
