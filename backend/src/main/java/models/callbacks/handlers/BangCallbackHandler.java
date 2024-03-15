@@ -19,11 +19,16 @@ public class BangCallbackHandler implements ICallbackHandler {
         if (game.getPlayer(event.getSenderIndex()).getCharacter() == Character.PoorJane){
             result |= card.getCardName() == PlayingCardName.Bang;
         }
-
-        if (card.getCardName() == PlayingCardName.Barile && game.getDeck().getLast().getSuit() == Suit.Hearts){
-            int index = event.getCardIndex();
-            game.getPlayer(event.getSenderIndex()).getCards().add(index, card);
-            return true;
+        System.out.println(card.getCardName());
+        if (card.getCardName() == PlayingCardName.Barile){
+            if (game.getDeck().getLast().getSuit() == Suit.Hearts){
+                int index = event.getCardIndex();
+                game.getPlayer(event.getSenderIndex()).getCards().add(index, card);
+                PlayingCard cardToDelete = game.getDeck().getFirst();
+                game.getDiscarded().add(cardToDelete);
+                game.getDeck().removeLast();
+                return true;
+            }
         }
 
         return result;
