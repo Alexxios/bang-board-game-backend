@@ -1,6 +1,7 @@
 package models.cards.playing;
 
 import callbacks.CallbackType;
+import cards.PlayingCardName;
 import cards.Suit;
 import models.PlayingCard;
 import models.Callback;
@@ -10,6 +11,7 @@ import models.HandleEventResult;
 import org.springframework.stereotype.Component;
 
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +31,11 @@ public class Panic extends ICard{
 
     @Override
     public HandleEventResult handlerEvent(GameEntity game, Event event) {
-        List<PlayingCard> cards = game.getPlayer(event.getGetterIndex()).getCards();
+        List<PlayingCard> cards = new ArrayList<>();
+
+        for(int i = 0; i < game.getPlayer(event.getGetterIndex()).getCards().size(); ++i){
+            cards.add(new PlayingCard());
+        }
 
         if (cards.isEmpty()){
             return new HandleEventResult(false, game);
