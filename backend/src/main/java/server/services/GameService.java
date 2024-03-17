@@ -207,16 +207,32 @@ public class GameService {
     }
 
     private void deleteDeadPlayers(GameEntity game){
-        System.out.println("check");
+        int bigSnakePlayerIndex = -1;
+
+
         List<Integer> deadPlayers = new ArrayList<>();
         for (int index = 0; index < game.getPlayers().size(); ++index){
             if (game.getPlayers().get(index).getHealth() <= 0){
                 deadPlayers.add(index);
                 gameEventsController.playerDeath(game.getGameId(), new PlayerDeath(index));
+            }else {
+                if(game.getPlayer(index).getCharacter() == Character.BigSnake){
+                    bigSnakePlayerIndex = index;
+                }
             }
         }
 
         for (int index : deadPlayers){
+
+            if (bigSnakePlayerIndex != -1){
+                Player bigSnakePlayer = game.getPlayer(bigSnakePlayerIndex);
+                List<PlayingCard> cards = game.getPlayer(index).getCards();
+                for (PlayingCard card : cards){
+                    bigSnakePlayer.receiveCard(card);
+                    gameEventsController.keepCard(game.getGameId(), new KeepCard(bigSnakePlayerIndex, card));
+                }
+            }
+
             game.getPlayers().remove(index);
         }
 
