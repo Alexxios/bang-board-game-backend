@@ -21,8 +21,8 @@ public class Player {
     public Player(Role role, Character character) {
         this.role = role;
         this.health = role.getHealth();
-        this.shootingDistance = 1;
         this.maxHealth = role.getHealth();
+        this.shootingDistance = 1;
         this.weapon = new PlayingCard(PlayingCardName.Colt, Suit.None, 0);
         this.cards = new ArrayList<>();
         this.buffs = new PlayerBuffs();
@@ -50,9 +50,9 @@ public class Player {
     private int maxHealth;
     @Setter
     private PlayingCard weapon;
+    private PlayerBuffs buffs;
     @Setter
     private int shootingDistance;
-    private PlayerBuffs buffs;
     @Setter
     private List<PlayingCard> cards;
     private Character character;

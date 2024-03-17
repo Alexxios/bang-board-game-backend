@@ -21,10 +21,7 @@ import models.cards.playing.ICard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
-import response.models.EventHandlingResult;
-import response.models.KeepCard;
-import response.models.NextMotionResult;
-import response.models.OnCardPlay;
+import response.models.*;
 import server.ws.controllers.GameEventsController;
 
 import java.util.ArrayList;
@@ -123,17 +120,7 @@ public class GameService {
             gameEventsController.nextMotion(game.getGameId(), new NextMotionResult(game.getMotionPlayerIndex()));
         }
 
-        List<Integer> deadPlayers = new ArrayList<>();
-        for (int index = 0; index < game.getPlayers().size(); ++index){
-            if (game.getPlayers().get(index).getHealth() <= 0){
-                deadPlayers.add(index);
-                gameEventsController.playerDeath(game.getGameId(), index);
-            }
-        }
-
-        for (int index : deadPlayers){
-            game.getPlayers().remove(index);
-        }
+        deleteDeadPlayers(game);
 
         FirebaseClient.updateDocument(documentReference, game);
         return new EventHandlingResult(handlingResult, event, game);
@@ -187,6 +174,8 @@ public class GameService {
             }
         }
 
+        deleteDeadPlayers(game);
+
         FirebaseClient.updateDocument(documentReference, game);
         return game;
     }
@@ -217,4 +206,26 @@ public class GameService {
         }
     }
 
+    private void deleteDeadPlayers(GameEntity game){
+        System.out.println("check");
+        List<Integer> deadPlayers = new ArrayList<>();
+        for (int index = 0; index < game.getPlayers().size(); ++index){
+            if (game.getPlayers().get(index).getHealth() <= 0){
+                deadPlayers.add(index);
+                gameEventsController.playerDeath(game.getGameId(), new PlayerDeath(index));
+            }
+        }
+
+        for (int index : deadPlayers){
+            game.getPlayers().remove(index);
+        }
+
+        checkOnFinish(game);
+    }
+
+    private void checkOnFinish(GameEntity game){
+        if (game.getPlayers().size() == 1){
+            gameEventsController.matchEnd(game.getGameId(), new MatchEnd(0));
+        }
+    }
 }
