@@ -55,5 +55,7 @@ public class Player {
     private int shootingDistance;
     @Setter
     private List<PlayingCard> cards;
+    @Setter
+    private boolean isDead;
     private Character character;
 }

@@ -25,6 +25,9 @@ public class GameEntity {
 
     public List<PlayingCard> nextMotion(){
         motionPlayerIndex = (motionPlayerIndex + 1) % players.size();
+        while(players.get(motionPlayerIndex).isDead()){
+            motionPlayerIndex = (motionPlayerIndex + 1) % players.size();
+        }
 
         ArrayList<PlayingCard> addedCards = new ArrayList<>();
         for (int i =  players.get(motionPlayerIndex).getCards().size(); i < players.get(motionPlayerIndex).getHealth(); ++i){

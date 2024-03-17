@@ -233,7 +233,7 @@ public class GameService {
                 }
             }
 
-            game.getPlayers().remove(index);
+            game.getPlayer(index).setDead(true);
         }
 
         checkOnFinish(game);
