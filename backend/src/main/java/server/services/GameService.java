@@ -240,8 +240,18 @@ public class GameService {
     }
 
     private void checkOnFinish(GameEntity game){
-        if (game.getPlayers().size() == 1){
-            gameEventsController.matchEnd(game.getGameId(), new MatchEnd(0));
+        int count = 0, winnerIndex = 0;
+
+        for (int index = 0; index < game.getPlayers().size(); ++index){
+            if (!game.getPlayer(index).isDead()){
+                count++;
+                winnerIndex = index;
+            }
         }
+
+        if (count == 1){
+            gameEventsController.matchEnd(game.getGameId(), new MatchEnd(winnerIndex));
+        }
+
     }
 }
