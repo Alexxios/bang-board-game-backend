@@ -5,6 +5,8 @@ import models.PlayingCard;
 import models.Event;
 import models.GameEntity;
 import models.HandleEventResult;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 import server.BackendApplication;
@@ -24,10 +26,10 @@ public class WellsFargo extends ICard{
             new AbstractMap.SimpleEntry<>(Suit.Hearts, 3)
     );
 
-    public WellsFargo(){
+    @Autowired
+    public WellsFargo(ApplicationContext context){
         super(copiesCount, cardTypesList);
-        AnnotationConfigApplicationContext parentContext = new AnnotationConfigApplicationContext(BackendApplication.class);
-        gameEventsController = parentContext.getBean("gameEventsControllerBean", GameEventsController.class);
+        gameEventsController = context.getBean("gameEventsControllerBean", GameEventsController.class);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package cards;
 
-import configurators.ModelsConfiguration;
 import models.CardDescription;
 import models.cards.playing.*;
 import models.cards.weapons.*;
@@ -8,7 +7,9 @@ import models.cards.playing.Bang;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import server.BackendApplication;
 
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.util.HashMap;
 
 @Service("cardMapperBean")
@@ -17,7 +18,7 @@ public class CardMapper {
     private final HashMap<PlayingCardName, ICard> cards = new HashMap<>();
 
     public CardMapper(){
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ModelsConfiguration.class);
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(BackendApplication.class);
 
         // weapons
         cards.put(PlayingCardName.Remington, context.getBean("remingtonCardBean", Remington.class));

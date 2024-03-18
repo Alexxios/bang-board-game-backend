@@ -4,7 +4,6 @@ import callbacks.CallbackHandlersMapper;
 import callbacks.CallbackType;
 import cards.Suit;
 import characters.Character;
-import configurators.CallbacksConfiguration;
 import helpers.CharactersGenerator;
 import models.callbacks.handlers.ICallbackHandler;
 import cards.CardMapper;
@@ -35,6 +34,10 @@ public class GameService {
     @Autowired
     private GameEventsController gameEventsController;
 
+    @Autowired
+    private FirebaseClient firebaseClient;
+
+    @Autowired
     private CallbackHandlersMapper callbackHandlersMapper;
 
     private static final String collectionName = "games";
@@ -42,12 +45,8 @@ public class GameService {
     private static final String gamesInfoCollectionName = "gamesInfo";
 
     public void initGame(String gameId) throws ExecutionException, InterruptedException {
-        if (callbackHandlersMapper == null){
-            AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(CallbacksConfiguration.class);
-            this.callbackHandlersMapper = context.getBean("callbackHandlersMapperBean", CallbackHandlersMapper.class);
-        }
 
-        CollectionReference collection = FirebaseClient.getCollection(collectionName);
+        CollectionReference collection = firebaseClient.getCollection(collectionName);
         List<QueryDocumentSnapshot> games = collection.get().get().getDocuments();
         for (QueryDocumentSnapshot document : games){
             if (Objects.equals(document.getId(), gameId)){
@@ -55,11 +54,11 @@ public class GameService {
             }
         }
 
-        DocumentReference gameIdDocumentreference = FirebaseClient.getDocument(gamesInfoCollectionName, gameId);
+        DocumentReference gameIdDocumentreference = firebaseClient.getDocument(gamesInfoCollectionName, gameId);
         GameId gameInfo = gameIdDocumentreference.get().get().toObject(GameId.class);
         int playersCount = gameInfo.getMaxPlayersCount();
 
-        DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
+        DocumentReference documentReference = firebaseClient.getDocument(collectionName, gameId);
         List<PlayingCard> cards = CardsGenerator.generateCards();
         List<Role> roles = RolesGenerator.generateRoles(playersCount);
         List<Character> characters = CharactersGenerator.generateCharacters(playersCount);
@@ -79,7 +78,7 @@ public class GameService {
     }
 
     public EventHandlingResult handleEvent(String gameId, Event event) throws ExecutionException, InterruptedException, GameDoesNotExist {
-        DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
+        DocumentReference documentReference = firebaseClient.getDocument(collectionName, gameId);
         GameEntity game = getGameEntity(documentReference);
         HandleEventResult result;
         boolean handlingResult = true;
@@ -122,13 +121,13 @@ public class GameService {
 
         deleteDeadPlayers(game);
 
-        FirebaseClient.updateDocument(documentReference, game);
+        firebaseClient.updateDocument(documentReference, game);
         return new EventHandlingResult(handlingResult, event, game);
     }
 
     public GameEntity nextMotion(String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
 
-        DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
+        DocumentReference documentReference = firebaseClient.getDocument(collectionName, gameId);
         GameEntity game = getGameEntity(documentReference);
 
         if (!game.getCallbacks().isEmpty()){
@@ -176,13 +175,13 @@ public class GameService {
 
         deleteDeadPlayers(game);
 
-        FirebaseClient.updateDocument(documentReference, game);
+        firebaseClient.updateDocument(documentReference, game);
         return game;
     }
 
 
     public GameEntity getGame(String gameId) throws ExecutionException, InterruptedException {
-        DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
+        DocumentReference documentReference = firebaseClient.getDocument(collectionName, gameId);
         ApiFuture<DocumentSnapshot> documentSnapshot = documentReference.get();
         return documentSnapshot.get().toObject(GameEntity.class);
     }

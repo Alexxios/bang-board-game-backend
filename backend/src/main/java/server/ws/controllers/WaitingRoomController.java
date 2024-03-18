@@ -28,13 +28,16 @@ public class WaitingRoomController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
+    @Autowired
+    private FirebaseClient firebaseClient;
+
     @MessageMapping("/leave-game")
     public void leaveGame(@Payload WaitingRoomMessage message) throws ExecutionException, InterruptedException {
         GameId game = gamesService.getGame(message.gameId());
         game.deleteUser(message.nickname());
 
-        DocumentReference documentReference = FirebaseClient.getDocument(collectionName, message.gameId());
-        FirebaseClient.updateDocument(documentReference, game);
+        DocumentReference documentReference = firebaseClient.getDocument(collectionName, message.gameId());
+        firebaseClient.updateDocument(documentReference, game);
 
         sendToSubscribers(message.gameId(), game.getPlayers());
     }
@@ -44,8 +47,8 @@ public class WaitingRoomController {
         GameId game = gamesService.getGame(message.gameId());
         game.changePlayerStatus(message.nickname());
 
-        DocumentReference documentReference = FirebaseClient.getDocument(collectionName, message.gameId());
-        FirebaseClient.updateDocument(documentReference, game);
+        DocumentReference documentReference = firebaseClient.getDocument(collectionName, message.gameId());
+        firebaseClient.updateDocument(documentReference, game);
 
         sendToSubscribers(message.gameId(), game.getPlayers());
     }

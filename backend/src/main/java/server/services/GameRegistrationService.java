@@ -37,21 +37,24 @@ class GameIdGenerator{
 public class GameRegistrationService {
     static final String collectionName = "gamesInfo";
 
+    @Autowired
+    private FirebaseClient firebaseClient;
+
     public String createGame(String user, int playersCount) throws ExecutionException, InterruptedException {
         final String gameId = GameIdGenerator.generateGameId(user, 4);
-        DocumentReference document = FirebaseClient.getDocument(collectionName, gameId);
+        DocumentReference document = firebaseClient.getDocument(collectionName, gameId);
         GameId game = new GameId(user, gameId, playersCount);
-        FirebaseClient.addToDocument(document, game);
+        firebaseClient.addToDocument(document, game);
         return gameId;
     }
 
     public void deleteGame(String gameId){
-        CollectionReference collectionReference = FirebaseClient.getCollection(collectionName);
-        FirebaseClient.deleteDocument(collectionReference, gameId);
+        CollectionReference collectionReference = firebaseClient.getCollection(collectionName);
+        firebaseClient.deleteDocument(collectionReference, gameId);
     }
 
     public int connectToGame(String user, String gameId) throws ExecutionException, InterruptedException, PlayerAlreadyInGame, CanNotJoinGame, FullGame, GameDoesNotExist {
-        DocumentReference documentReference = FirebaseClient.getDocument(collectionName, gameId);
+        DocumentReference documentReference = firebaseClient.getDocument(collectionName, gameId);
         DocumentSnapshot document = documentReference.get().get();
         int playersCount;
         if (document.exists()){
@@ -67,7 +70,7 @@ public class GameRegistrationService {
     }
 
     public GameId getGame(String gameId) throws ExecutionException, InterruptedException {
-        CollectionReference collection = FirebaseClient.getCollection(collectionName);
+        CollectionReference collection = firebaseClient.getCollection(collectionName);
         List<QueryDocumentSnapshot> games = collection.get().get().getDocuments();
         for (QueryDocumentSnapshot document : games){
             GameId game = document.toObject(GameId.class);
