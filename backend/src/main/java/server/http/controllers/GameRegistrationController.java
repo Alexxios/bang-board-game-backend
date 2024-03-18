@@ -1,10 +1,7 @@
 package server.http.controllers;
 import exceptions.game_exceptions.*;
 import models.GameId;
-import models.User;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import response.models.EnterGameResult;
 import server.services.GameRegistrationService;
 

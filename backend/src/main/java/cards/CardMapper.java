@@ -6,12 +6,9 @@ import models.cards.weapons.*;
 import models.cards.playing.Bang;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import server.BackendApplication;
 
-import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.util.HashMap;
 
 @Service

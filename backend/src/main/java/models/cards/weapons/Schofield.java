@@ -1,7 +1,6 @@
 package models.cards.weapons;
 
 import cards.Suit;
-import ch.qos.logback.core.joran.sanity.Pair;
 import models.PlayingCard;
 import models.Event;
 import models.GameEntity;

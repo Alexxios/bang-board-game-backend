@@ -3,7 +3,6 @@ package server.http.controllers;
 import exceptions.game_exceptions.GameDoesNotExist;
 import models.Event;
 import models.GameEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import response.models.EventHandlingResult;
 import server.services.GameService;

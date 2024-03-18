@@ -1,6 +1,5 @@
 package models.callbacks.handlers;
 
-import callbacks.CallbackType;
 import cards.PlayingCardName;
 import models.PlayingCard;
 import characters.Character;

@@ -1,4 +1,5 @@
 package helpers;
+
 import cards.CardMapper;
 import cards.PlayingCardName;
 import cards.Suit;
@@ -6,7 +7,6 @@ import models.PlayingCard;
 import models.cards.playing.ICard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

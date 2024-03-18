@@ -1,7 +1,6 @@
 package models.cards.playing;
 
 import callbacks.CallbackType;
-import cards.PlayingCardName;
 import cards.Suit;
 import models.PlayingCard;
 import models.Callback;

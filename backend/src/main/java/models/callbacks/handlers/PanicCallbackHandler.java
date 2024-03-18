@@ -1,7 +1,6 @@
 package models.callbacks.handlers;
 
 import models.PlayingCard;
-import models.Callback;
 import models.Event;
 import models.GameEntity;
 import org.springframework.stereotype.Component;

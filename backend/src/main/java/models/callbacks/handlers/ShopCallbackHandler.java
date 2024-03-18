@@ -1,11 +1,8 @@
 package models.callbacks.handlers;
 
 import models.PlayingCard;
-import characters.Character;
-import models.Callback;
 import models.Event;
 import models.GameEntity;
-import models.Player;
 import org.springframework.stereotype.Component;
 
 @Component("shopCallbackHandlerBean")

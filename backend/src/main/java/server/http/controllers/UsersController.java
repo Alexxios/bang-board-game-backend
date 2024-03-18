@@ -8,7 +8,6 @@ import org.springframework.web.server.ResponseStatusException;
 import response.models.NicknameCheckResult;
 import server.services.UsersService;
 
-import javax.swing.plaf.ComboBoxUI;
 import java.util.concurrent.ExecutionException;
 
 @RestController

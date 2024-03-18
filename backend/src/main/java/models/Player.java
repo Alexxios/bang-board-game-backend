@@ -2,7 +2,6 @@ package models;
 
 import cards.PlayingCardName;
 import cards.Suit;
-import models.PlayingCard;
 import cards.Role;
 import characters.Character;
 import lombok.Getter;

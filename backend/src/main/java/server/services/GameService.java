@@ -18,7 +18,6 @@ import helpers.RolesGenerator;
 import models.*;
 import models.cards.playing.ICard;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 import response.models.*;
 import server.ws.controllers.GameEventsController;

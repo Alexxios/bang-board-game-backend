@@ -3,9 +3,6 @@ package models;
 import callbacks.CallbackType;
 import lombok.Getter;
 import lombok.Setter;
-import server.services.GameService;
-
-import java.util.function.Function;
 
 @Getter
 public class Callback {

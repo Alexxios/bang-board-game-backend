@@ -7,9 +7,7 @@ import models.GameEntity;
 import models.HandleEventResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
-import server.BackendApplication;
 import server.ws.controllers.GameEventsController;
 
 import java.util.AbstractMap;

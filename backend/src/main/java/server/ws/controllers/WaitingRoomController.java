@@ -13,7 +13,6 @@ import request.models.WaitingRoomMessage;
 import server.services.GameRegistrationService;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 
