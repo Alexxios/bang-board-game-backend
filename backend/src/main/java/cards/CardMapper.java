@@ -14,7 +14,7 @@ import server.BackendApplication;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.util.HashMap;
 
-@Service("cardMapperBean")
+@Service
 @Scope("singleton")
 public class CardMapper {
     private final HashMap<PlayingCardName, ICard> cards = new HashMap<>();

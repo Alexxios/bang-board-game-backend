@@ -65,7 +65,6 @@ public class GameId {
     private String owner;
     private String gameId;
     private int maxPlayersCount;
-    private int playersCount;
     private GameStatus gameStatus;
     private List<PlayerId> players;
 }

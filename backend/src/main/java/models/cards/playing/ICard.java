@@ -19,6 +19,7 @@ public abstract class ICard {
     }
 
     protected int copiesCount;
+
     @Getter
     List<Map.Entry<Suit, Integer>> cardsTypesList;
 

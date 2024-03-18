@@ -46,6 +46,8 @@ public class GameService {
     private RolesGenerator rolesGenerator;
     @Autowired
     private CharactersGenerator charactersGenerator;
+    @Autowired
+    private CardMapper cardMapper;
 
     private static final String collectionName = "games";
 
@@ -89,6 +91,7 @@ public class GameService {
         GameEntity game = getGameEntity(documentReference);
         HandleEventResult result;
         boolean handlingResult = true;
+        int senderIndex = event.getSenderIndex();
 
         if (!game.getCallbacks().isEmpty()){
 
@@ -101,16 +104,11 @@ public class GameService {
 
             if (callback.checkCallback(game, event)){
                 callback.positiveAction(game);
-
                 changeMotionPlayerIndexWithCallback(game);
             }else{
                 handlingResult = false;
             }
         }else{
-            AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(CardMapper.class);
-
-            CardMapper cardMapper = context.getBean("cardMapperBean", CardMapper.class);
-
             ICard card = cardMapper.searchCard(event.getCardDescription());
             result = card.handlerEvent(game, event);
             game = result.game();
@@ -118,11 +116,11 @@ public class GameService {
         }
 
         if (handlingResult){
-            game.getPlayer(event.getSenderIndex()).getCards().remove(event.getCardIndex());
-            gameEventsController.cardPlay(gameId, new OnCardPlay(event.getSenderIndex(), event.getCardIndex()));
+            game.getPlayer(senderIndex).getCards().remove(event.getCardIndex());
+            gameEventsController.cardPlay(gameId, new OnCardPlay(senderIndex, event.getCardIndex()));
         }
 
-        if (game.getMotionPlayerIndex() != event.getSenderIndex()){
+        if (game.getMotionPlayerIndex() != senderIndex){
             gameEventsController.nextMotion(game.getGameId(), new NextMotionResult(game.getMotionPlayerIndex()));
         }
 
@@ -214,13 +212,13 @@ public class GameService {
 
     private void deleteDeadPlayers(GameEntity game){
         int bigSnakePlayerIndex = -1;
-
+        String gameId = game.getGameId();
 
         List<Integer> deadPlayers = new ArrayList<>();
         for (int index = 0; index < game.getPlayers().size(); ++index){
             if (game.getPlayers().get(index).getHealth() <= 0){
                 deadPlayers.add(index);
-                gameEventsController.playerDeath(game.getGameId(), new PlayerDeath(index));
+                gameEventsController.playerDeath(gameId, new PlayerDeath(index));
             }else {
                 if(game.getPlayer(index).getCharacter() == Character.BigSnake){
                     bigSnakePlayerIndex = index;
@@ -229,13 +227,12 @@ public class GameService {
         }
 
         for (int index : deadPlayers){
-
             if (bigSnakePlayerIndex != -1){
                 Player bigSnakePlayer = game.getPlayer(bigSnakePlayerIndex);
                 List<PlayingCard> cards = game.getPlayer(index).getCards();
                 for (PlayingCard card : cards){
                     bigSnakePlayer.receiveCard(card);
-                    gameEventsController.keepCard(game.getGameId(), new KeepCard(bigSnakePlayerIndex, card));
+                    gameEventsController.keepCard(gameId, new KeepCard(bigSnakePlayerIndex, card));
                 }
             }
 
