@@ -4,6 +4,8 @@ import models.CardDescription;
 import models.cards.playing.*;
 import models.cards.weapons.*;
 import models.cards.playing.Bang;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -17,8 +19,8 @@ import java.util.HashMap;
 public class CardMapper {
     private final HashMap<PlayingCardName, ICard> cards = new HashMap<>();
 
-    public CardMapper(){
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(BackendApplication.class);
+    @Autowired
+    public CardMapper(ApplicationContext context){
 
         // weapons
         cards.put(PlayingCardName.Remington, context.getBean("remingtonCardBean", Remington.class));

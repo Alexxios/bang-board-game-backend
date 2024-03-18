@@ -1,13 +1,14 @@
 package helpers;
 
 import cards.Role;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@Service
 public class RolesGenerator {
 
-
-    public static List<Role> generateRoles(int playersCount){
+    public List<Role> generateRoles(int playersCount){
         ArrayList<Role> result = new ArrayList<Role>();
         switch (playersCount){
             case 2:

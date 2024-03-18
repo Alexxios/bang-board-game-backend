@@ -4,28 +4,31 @@ import cards.PlayingCardName;
 import cards.Suit;
 import models.PlayingCard;
 import models.cards.playing.ICard;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@Service
 public class CardsGenerator {
 
-    private static final int maxRepeat = 5;
+    @Autowired
+    private ApplicationContext context;
 
-    public static List<PlayingCard> generateCards(){
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(CardMapper.class);
+    public List<PlayingCard> generateCards(){
 
         CardMapper cardMapper = context.getBean("cardMapperBean", CardMapper.class);
 
         ArrayList<PlayingCard> result = new ArrayList<>();
         for (PlayingCardName cardType : PlayingCardName.values()){
-            ICard card = cardMapper.searchCard(cardType);
-            if (card == null){
+            if (cardType.equals(PlayingCardName.ClosedCard)){
                 continue;
             }
-            for (int i = 0; i < card.getCardCopies(); ++i){
-                Map.Entry<Suit, Integer> pair = card.getCardsTypesList().get(i);
-                result.add(new PlayingCard(cardType, pair.getKey(), pair.getValue()));
+            ICard card = cardMapper.searchCard(cardType);
+            for (Map.Entry<Suit, Integer> cardStats : card.getCardsTypesList()){
+                result.add(new PlayingCard(cardType, cardStats.getKey(), cardStats.getValue()));
             }
         }
         Collections.shuffle(result);

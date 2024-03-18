@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.util.Objects;
 
 public class FirebaseAuth {
-    public static void authorizeFirebase() throws IOException {
+    public void authorizeFirebase() throws IOException {
         ClassLoader classLoader = BackendApplication.class.getClassLoader();
         InputStream serviceAccount = Objects.requireNonNull(classLoader.getResourceAsStream("serviceAccountKey.json"));
 

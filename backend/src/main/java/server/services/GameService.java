@@ -40,6 +40,13 @@ public class GameService {
     @Autowired
     private CallbackHandlersMapper callbackHandlersMapper;
 
+    @Autowired
+    private CardsGenerator cardsGenerator;
+    @Autowired
+    private RolesGenerator rolesGenerator;
+    @Autowired
+    private CharactersGenerator charactersGenerator;
+
     private static final String collectionName = "games";
 
     private static final String gamesInfoCollectionName = "gamesInfo";
@@ -59,9 +66,9 @@ public class GameService {
         int playersCount = gameInfo.getMaxPlayersCount();
 
         DocumentReference documentReference = firebaseClient.getDocument(collectionName, gameId);
-        List<PlayingCard> cards = CardsGenerator.generateCards();
-        List<Role> roles = RolesGenerator.generateRoles(playersCount);
-        List<Character> characters = CharactersGenerator.generateCharacters(playersCount);
+        List<PlayingCard> cards = cardsGenerator.generateCards();
+        List<Role> roles = rolesGenerator.generateRoles(playersCount);
+        List<Character> characters = charactersGenerator.generateCharacters(playersCount);
         List<Player> players = new ArrayList<Player>();
 
         for(int i = 0; i < playersCount; ++i){
