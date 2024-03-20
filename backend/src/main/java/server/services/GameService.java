@@ -143,31 +143,7 @@ public class GameService {
             changeMotionPlayerIndexWithCallback(game);
             gameEventsController.nextMotion(gameId, new NextMotionResult(callback.getEvent().getSenderIndex()));
         } else {
-            int previousPlayer = game.getMotionPlayerIndex();
-
-            List<PlayingCard> addedCardsCount = game.nextMotion();
-            int playerIndex = game.getMotionPlayerIndex();
-            PlayingCard firstCard = game.getDeck().getLast();
-            while(game.getPlayer(playerIndex).getBuffs().isHasPrison() && firstCard.getSuit() != Suit.Hearts){
-                game.getDiscarded().add(firstCard);
-                game.getDeck().removeLast();
-                firstCard = game.getDeck().getLast();
-                addedCardsCount = game.nextMotion();
-                playerIndex = game.getMotionPlayerIndex();
-            }
-
-            if (game.getPlayer(previousPlayer).getBuffs().isHasDinamite()){
-                int currentPlayer = game.getMotionPlayerIndex();
-                game.getPlayer(previousPlayer).getBuffs().setHasDinamite(false);
-                game.getPlayer(currentPlayer).getBuffs().setHasDinamite(true);
-
-                if (firstCard.getSuit() == Suit.Spades &&
-                    2 <= firstCard.getNumber() && firstCard.getNumber() <= 9){
-                    game.getPlayer(currentPlayer).getBuffs().setHasDinamite(false);
-                    game.getPlayer(currentPlayer).takeDamage(3);
-                }
-
-            }
+            List<PlayingCard> addedCardsCount = setNextMotion(game);
 
             game.setWasBangPlayed(false);
             gameEventsController.nextMotion(gameId, new NextMotionResult(game.getMotionPlayerIndex()));
@@ -200,13 +176,44 @@ public class GameService {
     }
 
     private void changeMotionPlayerIndexWithCallback(GameEntity game){
+        Event event = game.getCallbacks().getFirst().getEvent();
+        int senderIndex = event.getSenderIndex(), getterIndex = event.getGetterIndex();
         if (game.getCallbacks().size() == 1){
-            game.setMotionPlayerIndex(game.getCallbacks().getFirst().getEvent().getSenderIndex());
+            game.setMotionPlayerIndex(senderIndex);
             game.resetCallback();
         } else {
             game.resetCallback();
-            game.setMotionPlayerIndex(game.getCallbacks().getFirst().getEvent().getGetterIndex());
+            game.setMotionPlayerIndex(getterIndex);
         }
+    }
+
+    private List<PlayingCard> setNextMotion(GameEntity game){
+        int previousPlayer = game.getMotionPlayerIndex();
+
+        List<PlayingCard> addedCardsCount = game.nextMotion();
+        int playerIndex = game.getMotionPlayerIndex();
+        PlayingCard firstCard = game.getDeck().getLast();
+        while(game.getPlayer(playerIndex).getBuffs().isHasPrison() && firstCard.getSuit() != Suit.Hearts){
+            game.getDiscarded().add(firstCard);
+            game.getDeck().removeLast();
+            firstCard = game.getDeck().getLast();
+            addedCardsCount = game.nextMotion();
+            playerIndex = game.getMotionPlayerIndex();
+        }
+
+        if (game.getPlayer(previousPlayer).getBuffs().isHasDinamite()){
+            int currentPlayer = game.getMotionPlayerIndex();
+            game.getPlayer(previousPlayer).getBuffs().setHasDinamite(false);
+            game.getPlayer(currentPlayer).getBuffs().setHasDinamite(true);
+
+            if (firstCard.getSuit() == Suit.Spades &&
+                    2 <= firstCard.getNumber() && firstCard.getNumber() <= 9){
+                game.getPlayer(currentPlayer).getBuffs().setHasDinamite(false);
+                game.getPlayer(currentPlayer).takeDamage(3);
+            }
+        }
+
+        return addedCardsCount;
     }
 
     private void deleteDeadPlayers(GameEntity game){

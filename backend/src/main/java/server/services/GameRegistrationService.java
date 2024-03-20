@@ -43,7 +43,7 @@ public class GameRegistrationService {
         final String gameId = GameIdGenerator.generateGameId(user, 4);
         DocumentReference document = firebaseClient.getDocument(collectionName, gameId);
         GameId game = new GameId(user, gameId, playersCount);
-        firebaseClient.addToDocument(document, game);
+        firebaseClient.addDocument(document, game);
         return gameId;
     }
 
