@@ -47,11 +47,11 @@ public class Bang extends ICard {
         Player senderPlayer = game.getPlayer(sender);
         Player getterPlayer = game.getPlayer(getter);
 
-        if (senderPlayer.getCharacter() == Character.ColdbloodedRosie){
+        if (senderPlayer.getCharacter() == Character.PaulRegret){
             distance++;
         }
 
-        if (getterPlayer.getCharacter() == Character.ElusiveJoe){
+        if (getterPlayer.getCharacter() == Character.RoseDoolan){
             distance--;
         }
 
@@ -70,12 +70,12 @@ public class Bang extends ICard {
         Callback callback = new Callback(event, CallbackType.Bang);
         game.getCallbacks().add(callback);
 
-        if (game.getPlayer(sender).getCharacter() == Character.AngelEyes){
+        if (game.getPlayer(sender).getCharacter() == Character.SlabTheKiller){
             game.getCallbacks().add(callback);
         }
 
         boolean canPlayMultipleBang = senderPlayer.getWeapon().getCardName() == PlayingCardName.Volcanic
-                || senderPlayer.getCharacter() == Character.BillyTheKid;
+                || senderPlayer.getCharacter() == Character.WillyTheKid;
 
         if (!canPlayMultipleBang){
             game.setWasBangPlayed(true);

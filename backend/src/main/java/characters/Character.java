@@ -1,20 +1,20 @@
 package characters;
 
 public enum Character {
-    AngelEyes,
-    PoorJane,
-    MadDog,
-    BigSnake,
     BartCassidy,
-    LuckyHatch,
+    BlackJack,
+    CalamityJanet,
     ElGringo,
-    Tuco,
-    ColdbloodedRosie,
-    NoNamePerson,
     JesseJames,
+    Jourdonnais,
     KitCarlson,
-    BillyTheKid,
-    ElusiveJoe,
-    SusieLafayette,
-    TomKetchum,
+    LuckyDuke,
+    PaulRegret,
+    PedroRamirez,
+    RoseDoolan,
+    SidKetchum,
+    SlabTheKiller,
+    SuzyLafayette,
+    VultureSam,
+    WillyTheKid
 }

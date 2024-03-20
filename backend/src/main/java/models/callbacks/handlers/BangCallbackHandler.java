@@ -16,7 +16,7 @@ public class BangCallbackHandler implements ICallbackHandler {
     public boolean checkCallback(GameEntity game, Event event) {
         PlayingCard card =  event.getCardDescription().getCard();
         boolean result =  card.getCardName() == PlayingCardName.Miss || card.getCardName() == PlayingCardName.Beer;
-        if (game.getPlayer(event.getSenderIndex()).getCharacter() == Character.PoorJane){
+        if (game.getPlayer(event.getSenderIndex()).getCharacter() == Character.CalamityJanet){
             result |= card.getCardName() == PlayingCardName.Bang;
         }
 

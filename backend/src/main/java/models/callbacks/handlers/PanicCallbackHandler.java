@@ -19,7 +19,7 @@ public class PanicCallbackHandler implements ICallbackHandler {
 
         int senderIndex = callbackEvent.getSenderIndex();
         // Susie Lafayette Ability
-        if (game.getPlayer(senderIndex).getCharacter() == Character.SusieLafayette
+        if (game.getPlayer(senderIndex).getCharacter() == Character.SuzyLafayette
                 && game.getPlayer(senderIndex).getCards().isEmpty()) {
             game.getPlayer(senderIndex).receiveCard(game.drawFirstCard());
         }

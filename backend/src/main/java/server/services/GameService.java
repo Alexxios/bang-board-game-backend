@@ -118,7 +118,7 @@ public class GameService {
             game.getPlayer(senderIndex).getCards().remove(event.getCardIndex());
 
             // Susie Lafayette Ability
-            if (game.getPlayer(senderIndex).getCharacter() == Character.SusieLafayette
+            if (game.getPlayer(senderIndex).getCharacter() == Character.SuzyLafayette
                     && game.getPlayer(senderIndex).getCards().isEmpty()) {
                 game.getPlayer(senderIndex).receiveCard(game.drawFirstCard());
             }
@@ -240,7 +240,7 @@ public class GameService {
                 deadPlayers.add(index);
                 gameEventsController.playerDeath(gameId, new PlayerDeath(index));
             }else {
-                if(game.getPlayer(index).getCharacter() == Character.BigSnake){
+                if(game.getPlayer(index).getCharacter() == Character.VultureSam){
                     bigSnakePlayerIndex = index;
                 }
             }

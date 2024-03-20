@@ -54,7 +54,7 @@ public class Duel extends ICard{
         Player player = game.getPlayer(playerIndex);
         int count = 0;
         for (PlayingCard card : player.getCards()){
-            if (card.getCardName() == PlayingCardName.Bang || player.getCharacter() == Character.PoorJane && card.getCardName() == PlayingCardName.Miss){
+            if (card.getCardName() == PlayingCardName.Bang || player.getCharacter() == Character.CalamityJanet && card.getCardName() == PlayingCardName.Miss){
                 count++;
             }
         }
