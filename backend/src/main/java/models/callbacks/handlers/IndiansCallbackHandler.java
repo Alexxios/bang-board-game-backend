@@ -32,6 +32,12 @@ public class IndiansCallbackHandler implements ICallbackHandler {
         Event event = callback.getEvent();
         Player victim = game.getPlayer(event.getGetterIndex());
         victim.takeDamage(1);
+
+        // Bart Cassidy Ability
+        if (victim.getHealth() > 0 && victim.getCharacter() == Character.BartCassidy) {
+            victim.receiveCard(game.drawFirstCard());
+        }
+
         return game;
     }
 }

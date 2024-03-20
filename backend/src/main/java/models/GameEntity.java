@@ -29,7 +29,7 @@ public class GameEntity {
         }
 
         ArrayList<PlayingCard> addedCards = new ArrayList<>();
-        for (int i =  players.get(motionPlayerIndex).getCards().size(); i < players.get(motionPlayerIndex).getHealth(); ++i){
+        for (int i = players.get(motionPlayerIndex).getCards().size(); i < players.get(motionPlayerIndex).getHealth(); ++i){
             players.get(motionPlayerIndex).receiveCard(deck.getLast());
             addedCards.add(deck.getLast());
             deck.removeLast();

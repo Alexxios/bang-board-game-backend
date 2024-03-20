@@ -1,9 +1,11 @@
 package models.cards.playing;
 
 import cards.Suit;
+import characters.Character;
 import models.Event;
 import models.GameEntity;
 import models.HandleEventResult;
+import models.Player;
 import org.springframework.stereotype.Component;
 
 import java.util.AbstractMap;
@@ -26,7 +28,13 @@ public class Gatling extends ICard{
     public HandleEventResult handlerEvent(GameEntity game, Event event) {
         for (int i = 0; i < game.getPlayers().size(); ++i){
             if (i != event.getSenderIndex()){
-                game.getPlayer(i).takeDamage(1);
+                Player victim = game.getPlayer(i);
+                victim.takeDamage(1);
+
+                // Bart Cassidy Ability
+                if (victim.getHealth() > 0 && victim.getCharacter() == Character.BartCassidy) {
+                    victim.receiveCard(game.drawFirstCard());
+                }
             }
         }
         return new HandleEventResult(true, game);

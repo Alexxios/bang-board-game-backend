@@ -33,6 +33,10 @@ public class DuelCallbackHandler implements ICallbackHandler {
         Player victim = game.getPlayer(event.getGetterIndex());
         victim.takeDamage(1);
 
+        // Bart Cassidy Ability
+        if (victim.getHealth() > 0 && victim.getCharacter() == Character.BartCassidy) {
+            victim.receiveCard(game.drawFirstCard());
+        }
 
         for (int i = 0; i < game.getCallbacks().size() - 1; ++i){
             game.getCallbacks().removeLast();

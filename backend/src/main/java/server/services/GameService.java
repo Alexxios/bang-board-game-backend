@@ -210,6 +210,13 @@ public class GameService {
                     2 <= firstCard.getNumber() && firstCard.getNumber() <= 9){
                 game.getPlayer(currentPlayer).getBuffs().setHasDinamite(false);
                 game.getPlayer(currentPlayer).takeDamage(3);
+
+
+                // Bart Cassidy Ability
+                if (game.getPlayer(currentPlayer).getHealth() > 0
+                        && game.getPlayer(currentPlayer).getCharacter() == Character.BartCassidy) {
+                    game.getPlayer(currentPlayer).receiveCard(game.drawFirstCard());
+                }
             }
         }
 
