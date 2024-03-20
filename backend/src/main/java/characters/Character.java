@@ -7,7 +7,7 @@ public enum Character {
     BigSnake,
     BartCassidy,
     LuckyHatch,
-    Django,
+    ElGringo,
     Tuco,
     ColdbloodedRosie,
     NoNamePerson,

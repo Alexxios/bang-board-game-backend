@@ -65,8 +65,8 @@ public class GameEntity {
      */
     public PlayingCard drawFirstCard() {
         if (deck.isEmpty()) resetDeck();
-        PlayingCard card = deck.getFirst();
-        deck.removeFirst();
+        PlayingCard card = deck.getLast();
+        deck.removeLast();
         return card;
     }
 

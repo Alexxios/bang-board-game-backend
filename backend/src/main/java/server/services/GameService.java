@@ -116,6 +116,13 @@ public class GameService {
 
         if (handlingResult){
             game.getPlayer(senderIndex).getCards().remove(event.getCardIndex());
+
+            // Susie Lafayette Ability
+            if (game.getPlayer(senderIndex).getCharacter() == Character.SusieLafayette
+                    && game.getPlayer(senderIndex).getCards().isEmpty()) {
+                game.getPlayer(senderIndex).receiveCard(game.drawFirstCard());
+            }
+
             gameEventsController.cardPlay(gameId, new OnCardPlay(senderIndex, event.getCardIndex()));
         }
 
