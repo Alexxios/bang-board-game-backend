@@ -8,6 +8,7 @@ import models.HandleEventResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+import response.models.KeepCard;
 import server.ws.controllers.GameEventsController;
 
 import java.util.AbstractMap;
@@ -41,7 +42,7 @@ public class WellsFargo extends ICard{
         for (int i = 0; i < cardsCount; ++i){
             PlayingCard card = game.drawFirstCard();
             game.getPlayer(playerIndex).receiveCard(card);
-            gameEventsController.keepCard(game, card);
+            gameEventsController.keepCard(game, new KeepCard(playerIndex, card));
         }
 
         return new HandleEventResult(true, game);

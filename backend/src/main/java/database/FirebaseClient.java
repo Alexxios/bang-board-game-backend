@@ -24,8 +24,13 @@ public class FirebaseClient {
         collectionReference.document(documentName).set(object).get();
     }
 
-    public <T> void updateDocument(DocumentReference documentReference, T newObject) throws ExecutionException, InterruptedException {
-        documentReference.set(newObject).get();
+    public <T> void updateDocument(DocumentReference documentReference, T newObject) {
+        try{
+            documentReference.set(newObject).get();
+        } catch (Exception e) {
+
+        }
+
     }
 
     public DocumentReference getDocument(String collectionName, String documentName){

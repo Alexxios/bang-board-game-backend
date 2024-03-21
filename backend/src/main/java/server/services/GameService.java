@@ -188,6 +188,9 @@ public class GameService {
             game.resetCallback();
             game.setMotionPlayerIndex(getterIndex);
         }
+
+        DocumentReference documentReference = firebaseClient.getDocument(collectionName, game.getGameId());
+        firebaseClient.updateDocument(documentReference, game);
     }
 
     private List<PlayingCard> setNextMotion(GameEntity game){

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import response.models.*;
 
 import javax.swing.text.Document;
 import java.util.concurrent.ExecutionException;
@@ -28,27 +29,25 @@ public class GameEventsController {
     private FirebaseClient firebaseClient;
 
 
-    public <T> void nextMotion(GameEntity game, T message){
+    public void nextMotion(GameEntity game, NextMotionResult message){
         sendToSubscribers(game, nextMotionUrl, message);
     }
 
-    public <T> void keepCard(GameEntity game, T message){
+    public void keepCard(GameEntity game, KeepCard message){
         sendToSubscribers(game, keepCardUrl, message);
     }
 
-    public <T> void cardPlay(GameEntity game, T message){
+    public void cardPlay(GameEntity game, OnCardPlay message){
         sendToSubscribers(game, cardPlayUrl, message);
     }
 
-    public <T> void playerDeath(GameEntity game, T message){
+    public void playerDeath(GameEntity game, PlayerDeath message){
         sendToSubscribers(game, playerDeathUrl, message);
     }
 
-    public <T> void matchEnd(GameEntity game, T message){
+    public void matchEnd(GameEntity game, MatchEnd message){
         sendToSubscribers(game, matchEndUrl, message);
     }
-
-    public <T> void setSelectCard(GameEntity game, T message) {sendToSubscribers(game, selectCardUrl, message);}
 
     private <T> void sendToSubscribers(GameEntity game, String url,  T message){
         updateDatabase(game);
