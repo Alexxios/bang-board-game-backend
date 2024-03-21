@@ -38,7 +38,7 @@ public class DuelCallbackHandler implements ICallbackHandler {
             victim.receiveCard(game.drawFirstCard());
         }
 
-        for (int i = 0; i < game.getCallbacks().size() - 1; ++i){
+        for (int i = 0; i < game.getCallbacks().size(); ++i){
             game.getCallbacks().removeLast();
         }
 

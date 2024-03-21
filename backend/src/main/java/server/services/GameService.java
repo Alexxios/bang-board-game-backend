@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import response.models.*;
 import server.ws.controllers.GameEventsController;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -180,12 +181,13 @@ public class GameService {
 
     private void changeMotionPlayerIndexWithCallback(GameEntity game){
         Event event = game.getCallbacks().getFirst().getEvent();
-        int senderIndex = event.getSenderIndex(), getterIndex = event.getGetterIndex();
+        int senderIndex = event.getSenderIndex();
         if (game.getCallbacks().size() == 1){
             game.setMotionPlayerIndex(senderIndex);
             game.resetCallback();
         } else {
             game.resetCallback();
+            int getterIndex = game.getCallbacks().getFirst().getEvent().getGetterIndex();
             game.setMotionPlayerIndex(getterIndex);
         }
 
