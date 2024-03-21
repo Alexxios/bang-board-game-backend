@@ -39,7 +39,7 @@ public class Diligenza extends ICard{
         for (int i = 0; i < cardsCount; ++i){
             PlayingCard card = game.drawFirstCard();
             game.getPlayer(playerIndex).receiveCard(card);
-            gameEventsController.keepCard(game.getGameId(), card);
+            gameEventsController.keepCard(game, card);
         }
 
         return new HandleEventResult(true, game);

@@ -23,9 +23,10 @@ public class CardsGenerator {
 
         ArrayList<PlayingCard> result = new ArrayList<>();
         for (PlayingCardName cardType : PlayingCardName.values()){
-            if (cardType.equals(PlayingCardName.ClosedCard)){
+            if (cardType.equals(PlayingCardName.ClosedCard) || cardType.equals(PlayingCardName.Colt)){
                 continue;
             }
+
             ICard card = cardMapper.searchCard(cardType);
             for (Map.Entry<Suit, Integer> cardStats : card.getCardsTypesList()){
                 result.add(new PlayingCard(cardType, cardStats.getKey(), cardStats.getValue()));

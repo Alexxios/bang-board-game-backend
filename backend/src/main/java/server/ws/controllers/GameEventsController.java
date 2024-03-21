@@ -1,8 +1,14 @@
 package server.ws.controllers;
+import com.google.cloud.firestore.DocumentReference;
+import database.FirebaseClient;
+import models.GameEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+
+import javax.swing.text.Document;
+import java.util.concurrent.ExecutionException;
 
 @Service("gameEventsControllerBean")
 @Scope("singleton")
@@ -18,32 +24,46 @@ public class GameEventsController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
+    @Autowired
+    private FirebaseClient firebaseClient;
 
-    public <T> void nextMotion(String gameId, T message){
-        sendToSubscribers(gameId, nextMotionUrl, message);
+
+    public <T> void nextMotion(GameEntity game, T message){
+        sendToSubscribers(game, nextMotionUrl, message);
     }
 
-    public <T> void keepCard(String gameId, T message){
-        sendToSubscribers(gameId, keepCardUrl, message);
+    public <T> void keepCard(GameEntity game, T message){
+        sendToSubscribers(game, keepCardUrl, message);
     }
 
-    public <T> void cardPlay(String gameId, T message){
-        sendToSubscribers(gameId, cardPlayUrl, message);
+    public <T> void cardPlay(GameEntity game, T message){
+        sendToSubscribers(game, cardPlayUrl, message);
     }
 
-    public <T> void playerDeath(String gameId, T message){
-        sendToSubscribers(gameId, playerDeathUrl, message);
+    public <T> void playerDeath(GameEntity game, T message){
+        sendToSubscribers(game, playerDeathUrl, message);
     }
 
-    public <T> void matchEnd(String gameId, T message){
-        sendToSubscribers(gameId, matchEndUrl, message);
+    public <T> void matchEnd(GameEntity game, T message){
+        sendToSubscribers(game, matchEndUrl, message);
     }
 
-    public <T> void setSelectCard(String gameId, T message) {sendToSubscribers(gameId, selectCardUrl, message);}
+    public <T> void setSelectCard(GameEntity game, T message) {sendToSubscribers(game, selectCardUrl, message);}
 
-    private <T> void sendToSubscribers(String gameId, String url,  T message){
+    private <T> void sendToSubscribers(GameEntity game, String url,  T message){
+        updateDatabase(game);
+
         messagingTemplate.convertAndSendToUser(
-                gameId,url,
+                game.getGameId(), url,
                 message);
+    }
+
+    private void updateDatabase(GameEntity game) {
+        try{
+            DocumentReference documentReference = firebaseClient.getDocument("games", game.getGameId());
+            firebaseClient.updateDocument(documentReference, game);
+        } catch (Exception e) {
+
+        }
     }
 }

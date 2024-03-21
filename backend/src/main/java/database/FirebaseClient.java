@@ -16,19 +16,27 @@ public class FirebaseClient {
         database = FirestoreClient.getFirestore();
     }
 
-    public <T> String addDocument(DocumentReference documentReference, T object) throws ExecutionException, InterruptedException {
-        ApiFuture<WriteResult> collection = documentReference.set(object);
-        return collection.get().getUpdateTime().toString();
+    public <T> void addDocument(DocumentReference documentReference, T object) throws ExecutionException, InterruptedException {
+        new Thread(() -> {
+            ApiFuture<WriteResult> collection = documentReference.set(object);
+        }).start();
     }
 
-    public <T> DocumentReference addToCollection(CollectionReference collectionReference, String documentName, T object) throws ExecutionException, InterruptedException {
-        collectionReference.document(documentName).set(object).get();
-        return collectionReference.document(documentName).get().get().getReference();
+    public <T> void addToCollection(CollectionReference collectionReference, String documentName, T object) throws ExecutionException, InterruptedException {
+        new Thread(() -> {
+            try {
+                collectionReference.document(documentName).set(object).get();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
     }
 
-    public <T> String updateDocument(DocumentReference documentReference, T newObject) throws ExecutionException, InterruptedException {
+    public <T> void updateDocument(DocumentReference documentReference, T newObject) throws ExecutionException, InterruptedException {
         ApiFuture<WriteResult> collection = documentReference.set(newObject);
-        return collection.get().getUpdateTime().toString();
+        collection.get();
     }
 
     public DocumentReference getDocument(String collectionName, String documentName){
@@ -36,8 +44,10 @@ public class FirebaseClient {
     }
 
     public void deleteDocument(CollectionReference collectionReference, String documentName){
-        DocumentReference documentReference = collectionReference.document(documentName);
-        documentReference.delete();
+        new Thread(() -> {
+            DocumentReference documentReference = collectionReference.document(documentName);
+            documentReference.delete();
+        }).start();
     }
 
     public CollectionReference getCollection(String collectionName){

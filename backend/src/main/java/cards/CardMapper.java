@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
-@Service
-@Scope("singleton")
+@Service("cardMapperBean")
 public class CardMapper {
     private final HashMap<PlayingCardName, ICard> cards = new HashMap<>();
 

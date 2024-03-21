@@ -123,16 +123,14 @@ public class GameService {
                 game.getPlayer(senderIndex).receiveCard(game.drawFirstCard());
             }
 
-            gameEventsController.cardPlay(gameId, new OnCardPlay(senderIndex, event.getCardIndex()));
+            gameEventsController.cardPlay(game, new OnCardPlay(senderIndex, event.getCardIndex()));
         }
 
         if (game.getMotionPlayerIndex() != senderIndex){
-            gameEventsController.nextMotion(game.getGameId(), new NextMotionResult(game.getMotionPlayerIndex()));
+            gameEventsController.nextMotion(game, new NextMotionResult(game.getMotionPlayerIndex()));
         }
 
         deleteDeadPlayers(game);
-
-        firebaseClient.updateDocument(documentReference, game);
         return new EventHandlingResult(handlingResult, event, game);
     }
 
@@ -148,21 +146,19 @@ public class GameService {
             callbackHandler.negativeAction(game);
 
             changeMotionPlayerIndexWithCallback(game);
-            gameEventsController.nextMotion(gameId, new NextMotionResult(callback.getEvent().getSenderIndex()));
+            gameEventsController.nextMotion(game, new NextMotionResult(callback.getEvent().getSenderIndex()));
         } else {
             List<PlayingCard> addedCardsCount = setNextMotion(game);
 
             game.setWasBangPlayed(false);
-            gameEventsController.nextMotion(gameId, new NextMotionResult(game.getMotionPlayerIndex()));
 
+            gameEventsController.nextMotion(game, new NextMotionResult(game.getMotionPlayerIndex()));
             for (PlayingCard card : addedCardsCount){
-                gameEventsController.keepCard(gameId, new KeepCard(game.getMotionPlayerIndex(), card));
+                gameEventsController.keepCard(game, new KeepCard(game.getMotionPlayerIndex(), card));
             }
         }
 
         deleteDeadPlayers(game);
-
-        firebaseClient.updateDocument(documentReference, game);
         return game;
     }
 
@@ -238,7 +234,7 @@ public class GameService {
         for (int index = 0; index < game.getPlayers().size(); ++index){
             if (game.getPlayers().get(index).getHealth() <= 0){
                 deadPlayers.add(index);
-                gameEventsController.playerDeath(gameId, new PlayerDeath(index));
+                gameEventsController.playerDeath(game, new PlayerDeath(index));
             }else {
                 if(game.getPlayer(index).getCharacter() == Character.VultureSam){
                     bigSnakePlayerIndex = index;
@@ -252,7 +248,7 @@ public class GameService {
                 List<PlayingCard> cards = game.getPlayer(index).getCards();
                 for (PlayingCard card : cards){
                     bigSnakePlayer.receiveCard(card);
-                    gameEventsController.keepCard(gameId, new KeepCard(bigSnakePlayerIndex, card));
+                    gameEventsController.keepCard(game, new KeepCard(bigSnakePlayerIndex, card));
                 }
             }
 
@@ -273,7 +269,7 @@ public class GameService {
         }
 
         if (count == 1){
-            gameEventsController.matchEnd(game.getGameId(), new MatchEnd(winnerIndex));
+            gameEventsController.matchEnd(game, new MatchEnd(winnerIndex));
         }
 
     }
