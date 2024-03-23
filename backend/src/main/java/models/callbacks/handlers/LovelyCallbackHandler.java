@@ -1,5 +1,6 @@
 package models.callbacks.handlers;
 
+import cards.PlayingCardName;
 import characters.Character;
 import models.Event;
 import models.GameEntity;
@@ -17,7 +18,10 @@ public class LovelyCallbackHandler implements ICallbackHandler {
     @Override
     public boolean checkCallback(GameEntity game, Event event) {
         Event callbackEvent = game.getCallbacks().getFirst().getEvent();
-        int senderIndex = callbackEvent.getSenderIndex();
+        int senderIndex = callbackEvent.getSenderIndex(),
+            getterIndex = callbackEvent.getGetterIndex(),
+            cardIndex = callbackEvent.getCardIndex();
+        PlayingCardName cardName = game.getPlayer(senderIndex).getCards().get(cardIndex).getCardName();
 
         game.getPlayer(senderIndex).getCards().remove(event.getCardIndex());
 
@@ -32,7 +36,7 @@ public class LovelyCallbackHandler implements ICallbackHandler {
         game.getCallbacks().getFirst().setEvent(newEvent);
 
         game.getCardsForSelection().clear();
-        gameEventsController.cardPlay(game, new OnCardPlay(senderIndex, event.getCardIndex()));
+        gameEventsController.cardPlay(game, new OnCardPlay(getterIndex, senderIndex, cardName,  event.getCardIndex()));
         return true;
     }
 

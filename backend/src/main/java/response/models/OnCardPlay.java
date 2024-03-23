@@ -1,4 +1,6 @@
 package response.models;
 
-public record OnCardPlay (int playerIndex, int cardIndex){
+import cards.PlayingCardName;
+
+public record OnCardPlay (int getterIndex, int senderIndex, PlayingCardName cardName, int cardIndex){
 }

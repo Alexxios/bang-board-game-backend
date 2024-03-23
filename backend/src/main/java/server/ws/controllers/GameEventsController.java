@@ -20,8 +20,6 @@ public class GameEventsController {
     private final static String playerDeathUrl = "/player-death";
     private final static String matchEndUrl = "/match-end";
 
-    private final static String selectCardUrl = "/select-card";
-
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 

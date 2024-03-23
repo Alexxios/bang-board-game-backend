@@ -2,6 +2,7 @@ package server.services;
 
 import callbacks.CallbackHandlersMapper;
 import callbacks.CallbackType;
+import cards.PlayingCardName;
 import cards.Suit;
 import characters.Character;
 import helpers.CharactersGenerator;
@@ -91,7 +92,9 @@ public class GameService {
         GameEntity game = getGameEntity(documentReference);
         HandleEventResult result;
         boolean handlingResult = true;
-        int senderIndex = event.getSenderIndex();
+        int senderIndex = event.getSenderIndex(), getterIndex = event.getGetterIndex();
+        PlayingCardName cardName = null;
+
 
         if (!game.getCallbacks().isEmpty()){
 
@@ -109,6 +112,7 @@ public class GameService {
                 handlingResult = false;
             }
         }else{
+            cardName = game.getPlayer(senderIndex).getCards().get(event.getCardIndex()).getCardName();
             ICard card = cardMapper.searchCard(event.getCardDescription());
             result = card.handlerEvent(game, event);
             game = result.game();
@@ -124,7 +128,10 @@ public class GameService {
                 game.getPlayer(senderIndex).receiveCard(game.drawFirstCard());
             }
 
-            gameEventsController.cardPlay(game, new OnCardPlay(senderIndex, event.getCardIndex()));
+            if (cardName != null){
+                gameEventsController.cardPlay(game, new OnCardPlay(getterIndex, senderIndex, cardName, event.getCardIndex()));
+            }
+
         }
 
         if (game.getMotionPlayerIndex() != senderIndex){

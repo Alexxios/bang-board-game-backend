@@ -5,6 +5,7 @@ import models.PlayingCard;
 import models.Event;
 import models.GameEntity;
 import models.HandleEventResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import response.models.KeepCard;
 import server.ws.controllers.GameEventsController;
@@ -18,6 +19,7 @@ public class Diligenza extends ICard{
     private static final int copiesCount = 2;
     private static int cardsCount = 2;
 
+    @Autowired
     private GameEventsController gameEventsController;
 
     private final static List<Map.Entry<Suit, Integer>> cardTypesList = List.of(
