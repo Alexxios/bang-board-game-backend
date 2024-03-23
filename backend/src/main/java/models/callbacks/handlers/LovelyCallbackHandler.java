@@ -20,10 +20,10 @@ public class LovelyCallbackHandler implements ICallbackHandler {
         Event callbackEvent = game.getCallbacks().getFirst().getEvent();
         int senderIndex = callbackEvent.getSenderIndex(),
             getterIndex = callbackEvent.getGetterIndex(),
-            cardIndex = callbackEvent.getCardIndex();
-        PlayingCardName cardName = game.getPlayer(senderIndex).getCards().get(cardIndex).getCardName();
+            cardIndex = event.getCardIndex();
+        PlayingCardName cardName = game.getPlayer(getterIndex).getCards().get(cardIndex).getCardName();
 
-        game.getPlayer(senderIndex).getCards().remove(event.getCardIndex());
+        game.getPlayer(senderIndex).getCards().remove(cardIndex);
 
 
         // Susie Lafayette Ability

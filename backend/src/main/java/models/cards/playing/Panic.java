@@ -30,6 +30,10 @@ public class Panic extends ICard{
 
     @Override
     public HandleEventResult handlerEvent(GameEntity game, Event event) {
+        if (event.getGetterIndex() == event.getSenderIndex()){
+            return new HandleEventResult(false, game);
+        }
+
         List<PlayingCard> cards = new ArrayList<>();
 
         for(int i = 0; i < game.getPlayer(event.getGetterIndex()).getCards().size(); ++i){

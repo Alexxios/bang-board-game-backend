@@ -29,6 +29,10 @@ public class Indians extends ICard{
 
     @Override
     public HandleEventResult handlerEvent(GameEntity game, Event event) {
+        if (event.getGetterIndex() == event.getSenderIndex()){
+            return new HandleEventResult(false, game);
+        }
+
         int count = 0, playersCount = game.getPlayers().size(), previousPlayerIndex = event.getSenderIndex();
         for (int i = 0; i < playersCount; ++i){
             if (i != event.getSenderIndex()){

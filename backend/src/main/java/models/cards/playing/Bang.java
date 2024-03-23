@@ -37,15 +37,15 @@ public class Bang extends ICard {
 
     @Override
     public HandleEventResult handlerEvent(GameEntity game, Event event) {
-        if (game.isWasBangPlayed()){
-            return new HandleEventResult(false, game);
-        }
-
         int sender = event.getSenderIndex(), getter = event.getGetterIndex(), playersCount = game.getPlayers().size();
         int weaponDistance = game.getPlayer(sender).getShootingDistance();
         int distance = Math.min(Math.abs(sender - getter), Math.abs(playersCount + sender - getter));
         Player senderPlayer = game.getPlayer(sender);
         Player getterPlayer = game.getPlayer(getter);
+
+        if (game.isWasBangPlayed() || senderPlayer == getterPlayer){
+            return new HandleEventResult(false, game);
+        }
 
         if (senderPlayer.getCharacter() == Character.PaulRegret){
             distance++;

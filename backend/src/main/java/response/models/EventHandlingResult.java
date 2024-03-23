@@ -2,6 +2,7 @@ package response.models;
 
 import models.Event;
 import models.GameEntity;
+import models.HandlingResult;
 
-public record EventHandlingResult(boolean isSuccess, Event event, GameEntity game) {
+public record EventHandlingResult(HandlingResult handlingResult) {
 }

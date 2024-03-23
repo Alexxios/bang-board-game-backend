@@ -29,6 +29,10 @@ public class Shop extends ICard {
 
     @Override
     public HandleEventResult handlerEvent(GameEntity game, Event event) {
+        if (event.getGetterIndex() != event.getSenderIndex()){
+            return new HandleEventResult(false, game);
+        }
+
         int playersCount = game.getPlayers().size();
         ArrayList<PlayingCard> cards = new ArrayList<>();
 

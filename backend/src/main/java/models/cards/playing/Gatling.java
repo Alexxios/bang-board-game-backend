@@ -26,6 +26,10 @@ public class Gatling extends ICard{
 
     @Override
     public HandleEventResult handlerEvent(GameEntity game, Event event) {
+        if (event.getGetterIndex() == event.getSenderIndex()){
+            return new HandleEventResult(false, game);
+        }
+
         for (int i = 0; i < game.getPlayers().size(); ++i){
             if (i != event.getSenderIndex()){
                 Player victim = game.getPlayer(i);

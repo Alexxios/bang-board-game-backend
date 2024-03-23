@@ -28,6 +28,10 @@ public class Prison extends ICard {
 
     @Override
     public HandleEventResult handlerEvent(GameEntity game, Event event) {
+        if (event.getGetterIndex() == event.getSenderIndex()){
+            return new HandleEventResult(false, game);
+        }
+
         Player getter = game.getPlayer(event.getGetterIndex());
 
         if (getter.getRole() == Role.Sheriff){

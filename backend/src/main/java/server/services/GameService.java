@@ -91,7 +91,7 @@ public class GameService {
         DocumentReference documentReference = firebaseClient.getDocument(collectionName, gameId);
         GameEntity game = getGameEntity(documentReference);
         HandleEventResult result;
-        boolean handlingResult = true;
+        HandlingResult handlingResult = HandlingResult.Success;
         int senderIndex = event.getSenderIndex(), getterIndex = event.getGetterIndex();
         PlayingCardName cardName = null;
 
@@ -102,24 +102,29 @@ public class GameService {
             ICallbackHandler callback = callbackHandlersMapper.searchCallback(callbackType);
 
             if (!game.getCardsForSelection().isEmpty()){
-                handlingResult = false;
+                handlingResult = HandlingResult.NoChange;
             }
 
             if (callback.checkCallback(game, event)){
                 callback.positiveAction(game);
                 changeMotionPlayerIndexWithCallback(game);
             }else{
-                handlingResult = false;
+                handlingResult = HandlingResult.Failed;
             }
         }else{
             cardName = game.getPlayer(senderIndex).getCards().get(event.getCardIndex()).getCardName();
             ICard card = cardMapper.searchCard(event.getCardDescription());
             result = card.handlerEvent(game, event);
             game = result.game();
-            handlingResult = result.isSuccessful();
+
+            if (result.isSuccessful()){
+                handlingResult = HandlingResult.Success;
+            } else {
+                handlingResult = HandlingResult.Failed;
+            }
         }
 
-        if (handlingResult){
+        if (handlingResult == HandlingResult.Success){
             game.getPlayer(senderIndex).getCards().remove(event.getCardIndex());
 
             // Susie Lafayette Ability
@@ -139,7 +144,7 @@ public class GameService {
         }
 
         deleteDeadPlayers(game);
-        return new EventHandlingResult(handlingResult, event, game);
+        return new EventHandlingResult(handlingResult);
     }
 
     public GameEntity nextMotion(String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
