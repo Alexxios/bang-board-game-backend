@@ -56,11 +56,7 @@ public class GameEventsController {
     }
 
     private void updateDatabase(GameEntity game) {
-        try{
-            DocumentReference documentReference = firebaseClient.getDocument("games", game.getGameId());
-            firebaseClient.updateDocument(documentReference, game);
-        } catch (Exception e) {
-
-        }
+        DocumentReference documentReference = firebaseClient.getDocument("games", game.getGameId());
+        firebaseClient.updateDocument(documentReference, game);
     }
 }

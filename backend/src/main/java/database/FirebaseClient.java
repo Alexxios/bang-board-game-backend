@@ -3,8 +3,14 @@ package database;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import server.BackendApplication;
 
+import java.util.Arrays;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -16,19 +22,41 @@ public class FirebaseClient {
         database = FirestoreClient.getFirestore();
     }
 
-    public <T> void addDocument(DocumentReference documentReference, T object) throws ExecutionException, InterruptedException {
-        documentReference.set(object).get();
+    private static final Logger logger = LoggerFactory.getLogger(FirebaseAuth.class);
+
+    public <T> void addDocument(DocumentReference documentReference, T object) {
+        try{
+            documentReference.set(object).get();
+        } catch (InterruptedException e){
+            logger.error("Firebase request was interrupted. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (CancellationException e){
+            logger.error("Firebase request was cancelled, please check your database. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (ExecutionException e){
+            logger.error("Firebase request was interrupted while execution, please check your database.  Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        }
     }
 
-    public <T> void addToCollection(CollectionReference collectionReference, String documentName, T object) throws ExecutionException, InterruptedException {
-        collectionReference.document(documentName).set(object).get();
+    public <T> void addToCollection(CollectionReference collectionReference, String documentName, T object) {
+        try{
+            collectionReference.document(documentName).set(object).get();
+        } catch (InterruptedException e){
+            logger.error("Firebase request was interrupted. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (CancellationException e){
+            logger.error("Firebase request was cancelled, please check your database. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (ExecutionException e){
+            logger.error("Firebase request was interrupted while execution, please check your database.  Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        }
     }
 
     public <T> void updateDocument(DocumentReference documentReference, T newObject) {
         try{
             documentReference.set(newObject).get();
-        } catch (Exception e) {
-
+        } catch (InterruptedException e){
+            logger.error("Firebase request was interrupted. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (CancellationException e){
+            logger.error("Firebase request was cancelled, please check your database. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (ExecutionException e){
+            logger.error("Firebase request was interrupted while execution, please check your database.  Stacktrace: " + Arrays.toString(e.getStackTrace()));
         }
 
     }
@@ -41,8 +69,12 @@ public class FirebaseClient {
         try {
             DocumentReference documentReference = collectionReference.document(documentName);
             documentReference.delete().get();
-        } catch (Exception e){
-
+        } catch (InterruptedException e){
+            logger.error("Firebase request was interrupted. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (CancellationException e){
+            logger.error("Firebase request was cancelled, please check your database. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (ExecutionException e){
+            logger.error("Firebase request was interrupted while execution, please check your database.  Stacktrace: " + Arrays.toString(e.getStackTrace()));
         }
 
     }

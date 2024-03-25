@@ -18,6 +18,8 @@ import helpers.CardsGenerator;
 import helpers.RolesGenerator;
 import models.*;
 import models.cards.playing.ICard;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import response.models.*;
@@ -25,8 +27,10 @@ import server.ws.controllers.GameEventsController;
 
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -54,40 +58,48 @@ public class GameService {
 
     private static final String gamesInfoCollectionName = "gamesInfo";
 
-    public void initGame(String gameId) throws ExecutionException, InterruptedException {
+    private static final Logger logger = LoggerFactory.getLogger(GameRegistrationService.class);
 
-        CollectionReference collection = firebaseClient.getCollection(collectionName);
-        List<QueryDocumentSnapshot> games = collection.get().get().getDocuments();
-        for (QueryDocumentSnapshot document : games){
-            if (Objects.equals(document.getId(), gameId)){
-                return;
+    public void initGame(String gameId) {
+        try{
+            CollectionReference collection = firebaseClient.getCollection(collectionName);
+            List<QueryDocumentSnapshot> games = collection.get().get().getDocuments();
+            for (QueryDocumentSnapshot document : games){
+                if (Objects.equals(document.getId(), gameId)){
+                    return;
+                }
             }
-        }
 
-        DocumentReference gameIdDocumentreference = firebaseClient.getDocument(gamesInfoCollectionName, gameId);
-        GameId gameInfo = gameIdDocumentreference.get().get().toObject(GameId.class);
-        int playersCount = gameInfo.getMaxPlayersCount();
+            DocumentReference gameIdDocumentreference = firebaseClient.getDocument(gamesInfoCollectionName, gameId);
+            GameId gameInfo = gameIdDocumentreference.get().get().toObject(GameId.class);
+            int playersCount = gameInfo.getMaxPlayersCount();
+            DocumentReference documentReference = firebaseClient.getDocument(collectionName, gameId);
+            List<PlayingCard> cards = cardsGenerator.generateCards();
+            List<Role> roles = rolesGenerator.generateRoles(playersCount);
+            List<Character> characters = charactersGenerator.generateCharacters(playersCount);
+            List<Player> players = new ArrayList<Player>();
 
-        DocumentReference documentReference = firebaseClient.getDocument(collectionName, gameId);
-        List<PlayingCard> cards = cardsGenerator.generateCards();
-        List<Role> roles = rolesGenerator.generateRoles(playersCount);
-        List<Character> characters = charactersGenerator.generateCharacters(playersCount);
-        List<Player> players = new ArrayList<Player>();
-
-        for(int i = 0; i < playersCount; ++i){
-            Player newPlayer = new Player(roles.get(i), characters.get(i));
-            for (int j = 0; j < newPlayer.getHealth(); ++j){
-                newPlayer.receiveCard(cards.getFirst());
-                cards.removeFirst();
+            for(int i = 0; i < playersCount; ++i){
+                Player newPlayer = new Player(roles.get(i), characters.get(i));
+                for (int j = 0; j < newPlayer.getHealth(); ++j){
+                    newPlayer.receiveCard(cards.getFirst());
+                    cards.removeFirst();
+                }
+                players.add(newPlayer);
             }
-            players.add(newPlayer);
-        }
 
-        GameEntity game = new GameEntity(0, players, cards, gameId);
-        documentReference.set(game);
+            GameEntity game = new GameEntity(0, players, cards, gameId);
+            documentReference.set(game);
+        } catch (InterruptedException e){
+            logger.error("Firebase request was interrupted. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (CancellationException e){
+            logger.error("Firebase request was cancelled, please check your database. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (ExecutionException e){
+            logger.error("Firebase request was interrupted while execution, please check your database.  Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        }
     }
 
-    public EventHandlingResult handleEvent(String gameId, Event event) throws ExecutionException, InterruptedException, GameDoesNotExist {
+    public EventHandlingResult handleEvent(String gameId, Event event) throws GameDoesNotExist {
         DocumentReference documentReference = firebaseClient.getDocument(collectionName, gameId);
         GameEntity game = getGameEntity(documentReference);
         HandleEventResult result;
@@ -147,48 +159,74 @@ public class GameService {
         return new EventHandlingResult(handlingResult);
     }
 
-    public GameEntity nextMotion(String gameId) throws GameDoesNotExist, ExecutionException, InterruptedException {
+    public GameEntity nextMotion(String gameId) {
 
         DocumentReference documentReference = firebaseClient.getDocument(collectionName, gameId);
-        GameEntity game = getGameEntity(documentReference);
 
-        if (!game.getCallbacks().isEmpty()){
-            Callback callback = game.getCallbacks().getFirst();
-            CallbackType callbackType = callback.getCallbackType();
-            ICallbackHandler callbackHandler = callbackHandlersMapper.searchCallback(callbackType);
-            callbackHandler.negativeAction(game);
+        try{
+            GameEntity game = getGameEntity(documentReference);
 
-            changeMotionPlayerIndexWithCallback(game);
-            gameEventsController.nextMotion(game, new NextMotionResult(callback.getEvent().getSenderIndex()));
-        } else {
-            List<PlayingCard> addedCardsCount = setNextMotion(game);
+            if (!game.getCallbacks().isEmpty()){
+                Callback callback = game.getCallbacks().getFirst();
+                CallbackType callbackType = callback.getCallbackType();
+                ICallbackHandler callbackHandler = callbackHandlersMapper.searchCallback(callbackType);
+                callbackHandler.negativeAction(game);
 
-            game.setWasBangPlayed(false);
+                changeMotionPlayerIndexWithCallback(game);
+                gameEventsController.nextMotion(game, new NextMotionResult(callback.getEvent().getSenderIndex()));
+            } else {
+                List<PlayingCard> addedCardsCount = setNextMotion(game);
 
-            gameEventsController.nextMotion(game, new NextMotionResult(game.getMotionPlayerIndex()));
-            for (PlayingCard card : addedCardsCount){
-                gameEventsController.keepCard(game, new KeepCard(game.getMotionPlayerIndex(), card));
+                game.setWasBangPlayed(false);
+
+                gameEventsController.nextMotion(game, new NextMotionResult(game.getMotionPlayerIndex()));
+                for (PlayingCard card : addedCardsCount){
+                    gameEventsController.keepCard(game, new KeepCard(game.getMotionPlayerIndex(), card));
+                }
             }
-        }
 
-        deleteDeadPlayers(game);
-        return game;
+            deleteDeadPlayers(game);
+            return game;
+        } catch (CancellationException e){
+            logger.error("Firebase request was cancelled, please check your database. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (GameDoesNotExist e){}
+
+        return new GameEntity();
     }
 
 
-    public GameEntity getGame(String gameId) throws ExecutionException, InterruptedException {
+    public GameEntity getGame(String gameId) {
         DocumentReference documentReference = firebaseClient.getDocument(collectionName, gameId);
         ApiFuture<DocumentSnapshot> documentSnapshot = documentReference.get();
-        return documentSnapshot.get().toObject(GameEntity.class);
+        try{
+            return documentSnapshot.get().toObject(GameEntity.class);
+        } catch (InterruptedException e){
+            logger.error("Firebase request was interrupted. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (CancellationException e){
+            logger.error("Firebase request was cancelled, please check your database. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (ExecutionException e){
+            logger.error("Firebase request was interrupted while execution, please check your database.  Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        }
+        return null;
     }
 
-    private GameEntity getGameEntity(DocumentReference documentReference) throws ExecutionException, InterruptedException, GameDoesNotExist {
-        DocumentSnapshot document = documentReference.get().get();
-        if (!document.exists()){
-            throw new GameDoesNotExist();
+    private GameEntity getGameEntity(DocumentReference documentReference) throws GameDoesNotExist {
+        try{
+            DocumentSnapshot document = documentReference.get().get();
+            if (!document.exists()){
+                throw new GameDoesNotExist();
+            }
+
+            return document.toObject(GameEntity.class);
+        } catch (InterruptedException e){
+            logger.error("Firebase request was interrupted. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (CancellationException e){
+            logger.error("Firebase request was cancelled, please check your database. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (ExecutionException e){
+            logger.error("Firebase request was interrupted while execution, please check your database.  Stacktrace: " + Arrays.toString(e.getStackTrace()));
         }
 
-        return document.toObject(GameEntity.class);
+        return null;
     }
 
     private void changeMotionPlayerIndexWithCallback(GameEntity game){

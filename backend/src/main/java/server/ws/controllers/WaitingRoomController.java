@@ -31,7 +31,7 @@ public class WaitingRoomController {
     private FirebaseClient firebaseClient;
 
     @MessageMapping("/leave-game")
-    public void leaveGame(@Payload WaitingRoomMessage message) throws ExecutionException, InterruptedException {
+    public void leaveGame(@Payload WaitingRoomMessage message)  {
         GameId game = gamesService.getGame(message.gameId());
         game.deleteUser(message.nickname());
 
@@ -42,7 +42,7 @@ public class WaitingRoomController {
     }
 
     @MessageMapping("/change-player-status")
-    public void changePlayerStatus(@Payload WaitingRoomMessage message) throws ExecutionException, InterruptedException {
+    public void changePlayerStatus(@Payload WaitingRoomMessage message) {
         GameId game = gamesService.getGame(message.gameId());
         game.changePlayerStatus(message.nickname());
 
@@ -53,7 +53,7 @@ public class WaitingRoomController {
     }
 
     @MessageMapping("/game-connection")
-    public void userConnect(@Payload WaitingRoomMessage message) throws ExecutionException, InterruptedException {
+    public void userConnect(@Payload WaitingRoomMessage message) {
         List<PlayerId> players = gamesService.getGame(message.gameId()).getPlayers();
 
         sendToSubscribers(message.gameId(), players);

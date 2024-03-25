@@ -4,6 +4,7 @@ import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
+import database.FirebaseAuth;
 import database.FirebaseClient;
 import exceptions.game_exceptions.CanNotJoinGame;
 import exceptions.game_exceptions.FullGame;
@@ -11,11 +12,14 @@ import exceptions.game_exceptions.GameDoesNotExist;
 import exceptions.game_exceptions.PlayerAlreadyInGame;
 import models.GameId;
 import models.PlayerId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.*;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 class GameIdGenerator{
@@ -36,10 +40,12 @@ class GameIdGenerator{
 public class GameRegistrationService {
     static final String collectionName = "gamesInfo";
 
+    private static final Logger logger = LoggerFactory.getLogger(GameRegistrationService.class);
+
     @Autowired
     private FirebaseClient firebaseClient;
 
-    public String createGame(String user, int playersCount) throws ExecutionException, InterruptedException {
+    public String createGame(String user, int playersCount) {
         final String gameId = GameIdGenerator.generateGameId(user, 4);
         DocumentReference document = firebaseClient.getDocument(collectionName, gameId);
         GameId game = new GameId(user, gameId, playersCount);
@@ -52,31 +58,50 @@ public class GameRegistrationService {
         firebaseClient.deleteDocument(collectionReference, gameId);
     }
 
-    public int connectToGame(String user, String gameId) throws ExecutionException, InterruptedException, PlayerAlreadyInGame, CanNotJoinGame, FullGame, GameDoesNotExist {
+    public int connectToGame(String user, String gameId) throws PlayerAlreadyInGame, CanNotJoinGame, FullGame, GameDoesNotExist {
         DocumentReference documentReference = firebaseClient.getDocument(collectionName, gameId);
-        DocumentSnapshot document = documentReference.get().get();
-        int playersCount;
-        if (document.exists()){
-            GameId game = document.toObject(GameId.class);
-            game.addPlayer(new PlayerId(user));
-            documentReference.set(game);
-            playersCount = game.getPlayers().size();
-        }else{
-            throw new GameDoesNotExist();
-        }
 
-        return playersCount;
+        try{
+            DocumentSnapshot document = documentReference.get().get();
+            int playersCount;
+            if (document.exists()){
+                GameId game = document.toObject(GameId.class);
+                game.addPlayer(new PlayerId(user));
+                documentReference.set(game);
+                playersCount = game.getPlayers().size();
+            }else{
+                throw new GameDoesNotExist();
+            }
+
+            return playersCount;
+        } catch (InterruptedException e){
+            logger.error("Firebase request was interrupted. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (CancellationException e){
+            logger.error("Firebase request was cancelled, please check your database. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (ExecutionException e){
+            logger.error("Firebase request was interrupted while execution, please check your database.  Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        }
+        return 0;
     }
 
-    public GameId getGame(String gameId) throws ExecutionException, InterruptedException {
+    public GameId getGame(String gameId) {
         CollectionReference collection = firebaseClient.getCollection(collectionName);
-        List<QueryDocumentSnapshot> games = collection.get().get().getDocuments();
-        for (QueryDocumentSnapshot document : games){
-            GameId game = document.toObject(GameId.class);
-            if (Objects.equals(game.getGameId(), gameId)){
-                return game;
+        try{
+            List<QueryDocumentSnapshot> games = collection.get().get().getDocuments();
+            for (QueryDocumentSnapshot document : games){
+                GameId game = document.toObject(GameId.class);
+                if (Objects.equals(game.getGameId(), gameId)){
+                    return game;
+                }
             }
+        } catch (InterruptedException e){
+            logger.error("Firebase request was interrupted. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (CancellationException e){
+            logger.error("Firebase request was cancelled, please check your database. Stacktrace: " + Arrays.toString(e.getStackTrace()));
+        } catch (ExecutionException e){
+            logger.error("Firebase request was interrupted while execution, please check your database.  Stacktrace: " + Arrays.toString(e.getStackTrace()));
         }
+
 
         return new GameId();
     }
