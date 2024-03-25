@@ -17,22 +17,22 @@ public class UsersController {
     @Autowired
     private UsersService usersService;
 
-    @PostMapping("add-user")
-    public User addUser(@RequestBody User user) throws ExecutionException, InterruptedException {
-        if (usersService.isUserExists(user.getNickname())){
+    @PostMapping("add-user/{nickname}")
+    public void addUser(@PathVariable String nickname) {
+        if (usersService.isUserExists(nickname)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        return usersService.addUser(user);
+        usersService.addUser(nickname);
     }
 
-    @DeleteMapping("/delete-user")
-    public void deleteUser(@RequestParam String nickname) {
+    @DeleteMapping("/delete-user/{nickname}")
+    public void deleteUser(@PathVariable String nickname) {
         usersService.deleteUser(nickname);
     }
 
     @GetMapping("check-nickname")
-    public NicknameCheckResult checkNickname(@RequestParam String nickname) throws ExecutionException, InterruptedException {
+    public NicknameCheckResult checkNickname(@RequestParam String nickname) {
         boolean result = usersService.isUserExists(nickname);
-        return new NicknameCheckResult(!result);
+        return new NicknameCheckResult(result);
     }
 }

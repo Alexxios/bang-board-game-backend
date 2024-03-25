@@ -26,14 +26,15 @@ public class UsersService {
 
     private static final Logger logger = LoggerFactory.getLogger(UsersService.class);
 
-    public boolean isUserExists(String userId) {
+    public boolean isUserExists(String nickname) {
         CollectionReference collection = firebaseClient.getCollection(collectionName);
 
         try{
             List<QueryDocumentSnapshot> users = collection.get().get().getDocuments();
             for (QueryDocumentSnapshot document : users){
                 User user = document.toObject(User.class);
-                if (Objects.equals(user.getNickname(), userId)){
+                if (Objects.equals(user.getNickname(), nickname)){
+                    System.out.println("true");
                     return true;
                 }
             }
@@ -44,7 +45,7 @@ public class UsersService {
         } catch (ExecutionException e){
             logger.error("Firebase request was interrupted while execution, please check your database.  Stacktrace: " + Arrays.toString(e.getStackTrace()));
         }
-
+        System.out.println(false);
         return false;
     }
 
@@ -53,9 +54,9 @@ public class UsersService {
         firebaseClient.deleteDocument(collection, nickname);
     }
 
-    public User addUser(User user) {
+    public String addUser(String nickname) {
         CollectionReference collection = firebaseClient.getCollection(collectionName);
-        firebaseClient.addToCollection(collection, user.getNickname(), user);
-        return user;
+        firebaseClient.addToCollection(collection, nickname, new User(nickname));
+        return nickname;
     }
 }

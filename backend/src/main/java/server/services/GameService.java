@@ -89,7 +89,7 @@ public class GameService {
             }
 
             GameEntity game = new GameEntity(0, players, cards, gameId);
-            documentReference.set(game);
+            documentReference.set(game).get();
         } catch (InterruptedException e){
             logger.error("Firebase request was interrupted. Stacktrace: " + Arrays.toString(e.getStackTrace()));
         } catch (CancellationException e){
