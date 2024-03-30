@@ -1,0 +1,9 @@
+services:
+  frontend:
+    ports:
+      - 3000:3000
+    image: bang-frontend
+  backend:
+    image: bang-backend
+    ports:
+      - 8090:8090

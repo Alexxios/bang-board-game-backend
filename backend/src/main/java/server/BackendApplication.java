@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import java.io.IOException;
 
 @SpringBootApplication
-@ComponentScan({"database", "callbacks", "models", "helpers", "cards"})
+@ComponentScan({"database", "callbacks", "helpers", "cards", "server", "models"})
 public class BackendApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(BackendApplication.class);

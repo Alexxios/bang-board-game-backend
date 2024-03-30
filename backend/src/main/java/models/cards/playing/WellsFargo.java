@@ -19,16 +19,16 @@ import java.util.Map;
 public class WellsFargo extends ICard{
     private static int cardsCount = 3;
     private static final int copiesCount = 1;
+
+    @Autowired
     private GameEventsController gameEventsController;
 
     private final static List<Map.Entry<Suit, Integer>> cardTypesList = List.of(
             new AbstractMap.SimpleEntry<>(Suit.Hearts, 3)
     );
 
-    @Autowired
-    public WellsFargo(ApplicationContext context){
+    public WellsFargo(){
         super(copiesCount, cardTypesList);
-        gameEventsController = context.getBean("gameEventsControllerBean", GameEventsController.class);
     }
 
     @Override

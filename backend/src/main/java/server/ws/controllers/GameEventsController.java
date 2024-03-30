@@ -11,8 +11,7 @@ import response.models.*;
 import javax.swing.text.Document;
 import java.util.concurrent.ExecutionException;
 
-@Service("gameEventsControllerBean")
-@Scope("singleton")
+@Service
 public class GameEventsController {
     private final static String nextMotionUrl = "/next-motion";
     private final static String keepCardUrl = "/keep-card";
